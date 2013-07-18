@@ -1,5 +1,6 @@
 package org.carracoo.seeds;
 
+import org.carracoo.seeds.lang.Corn;
 import org.carracoo.seeds.mapper.grain.GrainMapper;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -43,7 +44,7 @@ public class Seeds {
 	}
 	
 	public SeedParser parser(SeedView view){
-		return parser(view.name());
+		return parser(view.format());
 	}
 	
 	public Object encodeMap(SeedView view, Object object) {
@@ -59,6 +60,11 @@ public class Seeds {
 	}
 	
 	public <T> T decode(SeedView view, byte[] bytes, Class<T> type){
-		return decodeMap(view,parser(view).decode(bytes),type);
+		if(type!=null && Corn.class.isAssignableFrom(type)){
+			return decodeMap(view,parser(view).decode(bytes),type);
+		}else{
+			return (T) parser(view).decode(bytes);
+		}
 	}
+
 }

@@ -145,14 +145,18 @@ public abstract class Grain<P extends Corn,V> implements Iterable<V> {
 	
 	private	int				limit;
 	private boolean			required;
+	private boolean			unique;
 	final protected int		limit(){
 		return limit;
 	}
 	final public	boolean multiple(){ 
 		return limit()>1;
 	}
-	final public	boolean required(){ 
+	final public	boolean required(){
 		return required;			
+	}
+	final public	boolean unique(){
+		return unique;
 	}
 	final protected Grain<P,V>	limit(int value){
 		limit = value;return this;
@@ -166,7 +170,9 @@ public abstract class Grain<P extends Corn,V> implements Iterable<V> {
 	final protected	Grain<P,V>   required(boolean value){ 
 		required=value;return this;
 	}
-	
+	final protected	Grain<P,V>   unique(boolean value){
+		unique=value;return this;
+	}
 	public Grain(){
 		try {
 			Field p = this.getClass().getDeclaredField("this$0");
@@ -175,7 +181,7 @@ public abstract class Grain<P extends Corn,V> implements Iterable<V> {
 				parent = (P) p.get(this);
 				if(!this.getClass().getEnclosingClass().equals(parent.clazz())){
 					throw new RuntimeException("Grain definition should be in parent class <"+this.getClass().getEnclosingClass()+","+ parent.clazz()+">");
-				}	
+				}
 				type = ReflectUtils.getTypeArguments(Grain.class, (Class<Grain>) getClass()).get(1);
 				Corn.FieldInfo f = parent.field();
 				if(f!=null){
@@ -194,7 +200,7 @@ public abstract class Grain<P extends Corn,V> implements Iterable<V> {
 			throw new RuntimeException(ex);
 		}
 		changed = false;
-		required(false).multiple(false);
+		required(false).multiple(false).unique(false);
 	}
 		
 	@Override

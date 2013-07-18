@@ -49,16 +49,34 @@ public class BsonBuffer extends ByteArray {
 	public static final byte MIN_KEY  		= (byte)0xff;
 	
 	private final Stack<Integer> pointers	= new Stack<Integer>();
-	
+
+	private final boolean isConvertUnderscoredRootIdEnabled;
+
+	private int level = 0;
+
+	public BsonBuffer(){
+		this(false);
+	}
+
+	public BsonBuffer(boolean isConvertUnderscoredRootIdEnabled){
+		super();
+		this.isConvertUnderscoredRootIdEnabled = isConvertUnderscoredRootIdEnabled;
+	}
+
 	public void startDocument(){
+		level++;
 		pointers.push(position());
 		writeInt(0);
 	}
 	
 	public void saveDocument(){
+		level--;
+		writeByte(TERMINATOR);
+
 		int sPos	= pointers.pop();
 		int ePos	= position();
 		int dLen	= ePos-sPos;
+
 		position(sPos);
 		writeInt(dLen);
 		position(ePos);
@@ -110,11 +128,16 @@ public class BsonBuffer extends ByteArray {
 		int  size = readInt();
 		byte type;
 		Map<String,Object> object = new LinkedHashMap<String, Object>();
+		level++;
 		while(TERMINATOR != (type = readByte())){
 			String key = readCString();
+			if(isConvertUnderscoredRootIdEnabled && level==1 && key.equals("_id")){
+				key = "id";
+			}
 			Object val = readValue(type);
 			object.put(key, val);
 		}
+		level--;
 		return object;
 	}
 	
@@ -150,8 +173,13 @@ public class BsonBuffer extends ByteArray {
 	
 	public void writeDocument(Object doc) {
 		startDocument();
-		for(Map.Entry<Object,Object> item:((Map<Object,Object>)doc).entrySet()){
-			writeElement(item.getKey(), item.getValue());
+		for(Map.Entry<String,Object> item:((Map<String,Object>)doc).entrySet()){
+			String key = item.getKey();
+			Object val = item.getValue();
+			if(isConvertUnderscoredRootIdEnabled && level==1 && key.equals("id")){
+				key = "_"+key;
+			}
+			writeElement(key, val);
 		}
 		saveDocument();
 	}
@@ -165,10 +193,10 @@ public class BsonBuffer extends ByteArray {
 		saveDocument();
 	}
 
-	private void writeElement(Object key, Object val) {
+	private void writeElement(String key, Object val) {
 		byte type = getType(val);
 		writeByte(type);
-		writeCString(key.toString());
+		writeCString(key);
 		switch(type){
 			case NULL     : break;
 			case STRING   : writeString(val.toString());break;
@@ -187,12 +215,8 @@ public class BsonBuffer extends ByteArray {
 	public void writeTerminator() {
 		writeByte(TERMINATOR);
 	}	
-	public BsonBuffer(){
-		super();
-	}
-	public BsonBuffer(int capasity){
-		super(capasity);
-	}
+
+
 	
 	public void writeString(Object object) {
 		byte[] bytes = object.toString().getBytes(UTF8);

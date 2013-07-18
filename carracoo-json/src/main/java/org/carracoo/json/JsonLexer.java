@@ -1,5 +1,7 @@
 package org.carracoo.json;
 
+import org.carracoo.utils.StringUtils;
+
 import java.io.*;
 
 /**
@@ -74,7 +76,12 @@ public class JsonLexer {
 
 		public Number asNumber(){
 			if(isNumber()){
-				return new Double(value());
+				String val = value();
+				if(val.indexOf('.')>0){
+					return Double.parseDouble(val);
+				}else{
+					return Long.parseLong(val);
+				}
 			}else{
 				throw new RuntimeException("cant cast to boolean");
 			}
@@ -82,7 +89,7 @@ public class JsonLexer {
 
 		public String asString(){
 			if(isString()){
-				return buffer.substring(start+1,end-1);
+				return StringUtils.unescapeString(buffer.substring(start+1,end-1));
 			}else{
 				throw new RuntimeException("cant cast to boolean");
 			}
@@ -105,6 +112,7 @@ public class JsonLexer {
 				.replaceAll("\t","\\\\t")
 			;
 		}
+
 	}
 
 
@@ -231,7 +239,7 @@ public class JsonLexer {
 				}else if(ch==-1){
 					token = Token.create(Token.Type.EOF,reader,from,reader.position());
 				}else{
-					throw new RuntimeException("Invalid Json Data");
+					throw new RuntimeException("Invalid Json Data\n"+reader.toString());
 				}
 		}
 		while(skipWhitespace && Token.Type.WS.equals(token.type)){
@@ -260,7 +268,7 @@ public class JsonLexer {
 		return ch=='n';
 	}
 	private boolean isStringStart(int ch){
-		return ch=='"';
+		return ch=='"'||ch=='\'';
 	}
 	private boolean isNumberStart(int ch){
 		return isDigit(ch) || ch=='-';
@@ -281,11 +289,12 @@ public class JsonLexer {
 		}
 	}
 	private void readString(){
+		int     sym     = symbol;
 		int     ch      = -1;
 		boolean c       = true;
 		do{
 			ch = read();
-			if(isStringStart(ch)){
+			if(sym==ch){
 				c=false;
 			}else
 			if(ch=='\\'){

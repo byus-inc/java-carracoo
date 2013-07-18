@@ -32,7 +32,11 @@ public class SeedView {
 	public String name(){
 		return name;
 	}
-	
+
+	public String format(){
+		return name.indexOf(':')>0?name.substring(0,name.indexOf(':')):name;
+	}
+
 	private final Path path;
 	public Path path(){
 		return path;
@@ -42,13 +46,13 @@ public class SeedView {
 		this(name,new Path());
 	}
 	
-	public SeedView(String name,Path path){
+	public SeedView(String name, Path path){
 		this.name = name;
 		this.path = path;
 	}
 	
 	public boolean is(String view) {
-		return this.name.equals(view);
+		return this.name.startsWith(view);
 	}
 	public boolean isRoot() {
 		return path.size()==1;

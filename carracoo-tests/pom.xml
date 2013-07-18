@@ -30,9 +30,22 @@
 		</dependency>
 		<dependency>
 			<groupId>org.carracoo</groupId>
+			<artifactId>carracoo-jongo</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.carracoo</groupId>
+			<artifactId>carracoo-rest</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.carracoo</groupId>
 			<artifactId>carracoo-utils</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 </project>

@@ -11,16 +11,43 @@ import java.io.*;
  */
 public class IO {
 
-	public static String readInputStream(InputStream in) throws IOException {
-		BufferedInputStream bis = new BufferedInputStream(in);
+	public static synchronized String readInputStream(InputStream in) throws IOException {
 		ByteArrayOutputStream buf = new ByteArrayOutputStream();
-		int result = bis.read();
-		while (result != -1) {
+		int result;
+		while ((result = in.read()) != -1) {
 			byte b = (byte) result;
 			buf.write(b);
-			result = bis.read();
 		}
 		return buf.toString();
+	}
+
+	public static synchronized byte[] readInputStreamBytes(InputStream in) throws IOException {
+		ByteArrayOutputStream buf = new ByteArrayOutputStream();
+		int result;
+		while ((result = in.read()) != -1) {
+			byte b = (byte) result;
+			buf.write(b);
+		}
+		return buf.toByteArray();
+	}
+
+	public static byte[] readSized(InputStream in) throws IOException{
+		int size = readInt(in);
+		byte[] bytes = new byte[size];
+		ByteUtils.writeInt(bytes,0,size);
+		for(int i=4;i<size;i++){
+			bytes[i]=(byte)in.read();
+		}
+		return bytes;
+	}
+
+	public static int readInt(InputStream in) throws IOException{
+		return (
+			(in.read() & 0xff) +
+			((in.read() & 0xff) << 8) +
+			((in.read() & 0xff) << 16) +
+			(in.read() << 24)
+		);
 	}
 
 	public static void writeFile(InputStream stream, String path) {

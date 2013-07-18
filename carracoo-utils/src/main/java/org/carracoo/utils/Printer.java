@@ -117,7 +117,7 @@ public class Printer {
 
 		@Override
 		protected void print(Cursor cursor, Appendable buf, Object val) throws IOException {
-			append(buf, val.toString(), ANSI.Color.BLUE);
+			append(buf, val.toString(), ANSI.Color.CYAN);
 		}
 	}
 	public static class BooleanPrinter extends ObjectPrinter {

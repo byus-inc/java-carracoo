@@ -20,7 +20,9 @@
 		<module>carracoo-seeds</module>
 		<module>carracoo-json</module>
 		<module>carracoo-bson</module>
+		<module>carracoo-congo</module>
 		<module>carracoo-tests</module>
+		<module>carracoo-rest</module>
 	</modules>
 
 	<properties>

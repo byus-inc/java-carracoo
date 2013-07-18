@@ -122,4 +122,92 @@ public class StringUtils {
 		return Slug.toSlug(str);
 	}
 
+	public static String unescapeString( String input ){
+		String result = "";
+		int backslashIndex = 0;
+		int nextSubstringStartPosition = 0;
+		int len = input.length();
+		do{
+			// Find the next backslash in the input
+			backslashIndex = input.indexOf( '\\', nextSubstringStartPosition );
+			if ( backslashIndex >= 0 ){
+				result += input.substring( nextSubstringStartPosition, backslashIndex );
+				// Move past the backslash and next character (all escape sequences are
+				// two characters, except for \\u, which will advance this further)
+				nextSubstringStartPosition = backslashIndex + 2;
+				// Check the next character so we know what to escape
+				char escapedChar = input.charAt( backslashIndex + 1 );
+				switch ( escapedChar ){
+					// Try to list the most common expected cases first to improve performance
+					case '"':
+						result += escapedChar;
+						break; // quotation mark
+					case '\\':
+						result += escapedChar;
+						break; // reverse solidus
+					case 'n':
+						result += '\n';
+						break; // newline
+					case 'r':
+						result += '\r';
+						break; // carriage return
+					case 't':
+						result += '\t';
+					break; // horizontal tab
+					// Convert a unicode escape sequence to it's character value
+					case 'u':
+						// Save the characters as a string we'll struct to an int
+						String hexValue = "";
+						int unicodeEndPosition = nextSubstringStartPosition + 4;
+						// Make sure there are enough characters in the string leftover
+						if ( unicodeEndPosition > len ){
+							new RuntimeException("Unexpected end of input.  Expecting 4 hex digits after \\u." );
+						}
+						// Try to find 4 hex characters
+						for ( int i = nextSubstringStartPosition; i < unicodeEndPosition; i++ )	{
+							// get the next character and determine
+							// if it's a valid hex digit or not
+							char possibleHexChar = input.charAt( i );
+							if ( !isHexDigit( possibleHexChar ) ){
+								new RuntimeException( "Excepted a hex digit, but found: " + possibleHexChar );
+							}
+							// Valid hex digit, add it to the value
+							hexValue += possibleHexChar;
+						}
+						// Convert hexValue to an integer, and use that
+						// integer value to create a character to add
+						// to our string.
+						result += String.valueOf((char)Integer.parseInt(hexValue, 16 ));
+						// Move past the 4 hex digits that we just read
+						nextSubstringStartPosition = unicodeEndPosition;
+					break;
+					case 'f':
+						result += '\f';
+					break; // form feed
+					case '/':
+						result += '/';
+					break; // solidus
+					case 'b':
+						result += '\b';
+					break; // bell
+					default:
+						result += '\\' + escapedChar; // Couldn't unescape the sequence, so just pass it through
+				}
+			}else{
+				result += input.substring( nextSubstringStartPosition );
+				break;
+			}
+		} while ( nextSubstringStartPosition < len );
+		return result;
+	}
+
+
+	private static Boolean isDigit( char ch){
+		return ( ch >= '0' && ch <= '9' );
+	}
+
+	private static Boolean isHexDigit( char ch ) {
+		return ( isDigit( ch ) || ( ch >= 'A' && ch <= 'F' ) || ( ch >= 'a' && ch <= 'f' ) );
+	}
+
 }

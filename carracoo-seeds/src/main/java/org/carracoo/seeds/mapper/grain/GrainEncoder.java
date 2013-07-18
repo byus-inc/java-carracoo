@@ -71,7 +71,7 @@ public class GrainEncoder {
 	}
 	
 	private Object encodeModel(SeedView view, Corn model) {
-		HashMap object = new HashMap();
+		HashMap object = new LinkedHashMap();
 		Object converted  = model.get(view);
 		if(!model.equals(converted)){
 			return encodeValue(view,converted);

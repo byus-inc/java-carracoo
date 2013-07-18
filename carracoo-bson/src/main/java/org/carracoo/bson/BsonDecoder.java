@@ -9,7 +9,7 @@ package org.carracoo.bson;
  */
 public class BsonDecoder  {
 	public Object decode(byte[] data) {
-		BsonBuffer bson = new BsonBuffer();
+		BsonBuffer bson = new BsonBuffer(true);
 		bson.writeBytes(data);
 		bson.position(0);
 		return bson.readDocument();

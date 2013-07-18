@@ -98,4 +98,9 @@ public class JsonReader {
 	public String substring(int from,int to){
 		return buffer.substring(from, to);
 	}
+
+	@Override
+	public String toString() {
+		return buffer.toString();
+	}
 }

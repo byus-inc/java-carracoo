@@ -33,7 +33,10 @@ public class JsonDecoder {
 	}
 
 	private Object decodeValue(){
-		JsonLexer.Token token = lexer.next();
+		return decodeValue(lexer.next());
+	}
+
+	private Object decodeValue(JsonLexer.Token token){
 		switch (token.type){
 			case NULL           : return null;
 			case TRUE           :
@@ -49,6 +52,9 @@ public class JsonDecoder {
 	private Object decodeObject(){
 		Map<String,Object> object     = new LinkedHashMap<String, Object>();
 		JsonLexer.Token token   = lexer.next();
+		if(token.type.equals(JsonLexer.Token.Type.OBJECT_END)){
+			return object;
+		}
 		switch (token.type){
 			case OBJECT_END     : return object;
 			case STRING         :
@@ -78,20 +84,21 @@ public class JsonDecoder {
 	}
 
 	private Object decodeArray(){
-		ArrayList<Object> array       = new ArrayList<Object>();
+		ArrayList<Object> array = new ArrayList<Object>();
 		JsonLexer.Token token   = lexer.current();
 		switch (token.type){
 			case ARRAY_START    :
 				boolean end = false;
 				while (!end){
-					Object value   = decodeValue();
-					array.add(value);
-					token               = lexer.next();
-					if(token.type.equals(JsonLexer.Token.Type.ARRAY_END)){
+					JsonLexer.Token next = lexer.next();
+					if(next.type.equals(JsonLexer.Token.Type.ARRAY_END)){
 						end=true;
-					}else
-					if(!token.type.equals(JsonLexer.Token.Type.COMMA)){
-						throw new RuntimeException("invalid value token");
+					}else{
+						if(next.type.equals(JsonLexer.Token.Type.COMMA)){
+							array.add(decodeValue());
+						}else{
+							array.add(decodeValue(next));
+						}
 					}
 				}
 			break;
@@ -100,5 +107,5 @@ public class JsonDecoder {
 		return array;
 	}
 
-	
+
 }

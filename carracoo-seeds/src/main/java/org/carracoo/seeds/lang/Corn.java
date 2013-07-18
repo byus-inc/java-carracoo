@@ -11,11 +11,7 @@ import org.carracoo.utils.Printer;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -28,6 +24,7 @@ public class Corn {
 	
 	
 	private static final Map<Class,List<FieldInfo>> FIELDS = new ConcurrentHashMap<Class, List<FieldInfo>>();
+	private static final Map<Class,Set<String>> KEYS = new ConcurrentHashMap<Class, Set<String>>();
 	protected final static class FieldInfo {
 		public final Field field;
 		public final int   index;
@@ -39,7 +36,7 @@ public class Corn {
 	
 	protected final Class<? extends Corn> clazz(){
 		Class<? extends Corn> cls = this.getClass();
-		while(cls.getEnclosingClass()!=null){
+		while(cls.isAnonymousClass() && cls.getEnclosingClass()!=null){
 			cls = (Class<? extends Corn>) cls.getSuperclass();
 		}
 		return cls;
@@ -59,7 +56,19 @@ public class Corn {
 		}
 		return FIELDS.get(cls);
 	}
-	
+
+	public final Set<String> keys(){
+		Class<?> cls = clazz();
+		if(!KEYS.containsKey(cls)){
+			Set<String> keys = new LinkedHashSet<String>();
+			for(FieldInfo field:fields()){
+				keys.add(field.field.getName());
+			}
+			KEYS.put(cls, keys);
+		}
+		return KEYS.get(cls);
+	}
+
 	public List<Grain> properties(){
 		try{
 			List<Grain> properties = new ArrayList<Grain>();

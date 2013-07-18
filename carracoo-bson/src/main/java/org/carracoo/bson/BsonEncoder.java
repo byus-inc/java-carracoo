@@ -9,10 +9,9 @@ package org.carracoo.bson;
  * To change this template use File | Settings | File Templates.
  */
 public class BsonEncoder {
-	
-	
+
 	public byte[] encode(Object value) {
-		BsonBuffer out  = new BsonBuffer();
+		BsonBuffer out  = new BsonBuffer(true);
 		out.writeDocument(value);
 		return out.array();
 	}

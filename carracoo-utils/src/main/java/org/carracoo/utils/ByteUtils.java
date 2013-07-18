@@ -71,6 +71,7 @@ public class ByteUtils {
 		return i;
 	}
 
+
 	public static long readLong(byte[] buffer, int index) {
 		long l = (
 			(buffer[index + 0] & 0xff) +
@@ -127,16 +128,18 @@ public class ByteUtils {
 	public static void write(byte[] buffer, int index, byte[] value) {
 		System.arraycopy(value, 0, buffer, index, value.length);
 	}
-
 	public static void printHexString(byte[] bytes) {
-		System.out.println(getHexString(bytes));
+		printHexString(bytes,false);
+	}
+	public static void printHexString(byte[] bytes,boolean ascii) {
+		System.out.println(getHexString(bytes,ascii));
 	}
 
 	public static String getHexString(byte[] bytes) {
 		return getHexString(bytes, false);
 	}
 
-	public static String getHexString(byte[] bytes, Boolean ascii) {
+	public static String getHexString(byte[] bytes, boolean ascii) {
 		final StringBuilder buf = new StringBuilder();
 		for (int i = 0; i < bytes.length; i++) {
 			int b = 0xff & bytes[i];

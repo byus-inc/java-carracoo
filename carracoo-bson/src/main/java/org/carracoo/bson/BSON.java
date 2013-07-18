@@ -10,11 +10,11 @@ package org.carracoo.bson;
  */
 public class BSON {
 	
-	public Object decode(byte[] data) {
+	public static Object decode(byte[] data) {
 		return new BsonDecoder().decode(data);
 	}
 
-	public byte[] encode(Object value) {
+	public static byte[] encode(Object value) {
 		return new BsonEncoder().encode(value);
 	}
 }
