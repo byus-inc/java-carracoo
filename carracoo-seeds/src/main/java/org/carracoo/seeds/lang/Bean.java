@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Sergey
  */
-public class Corn {
+public class Bean {
 	
 	
 	
@@ -34,10 +34,10 @@ public class Corn {
 		}
 	}
 	
-	protected final Class<? extends Corn> clazz(){
-		Class<? extends Corn> cls = this.getClass();
+	protected final Class<? extends Bean> clazz(){
+		Class<? extends Bean> cls = this.getClass();
 		while(cls.isAnonymousClass() && cls.getEnclosingClass()!=null){
-			cls = (Class<? extends Corn>) cls.getSuperclass();
+			cls = (Class<? extends Bean>) cls.getSuperclass();
 		}
 		return cls;
 	}
@@ -48,7 +48,7 @@ public class Corn {
 			List<FieldInfo> fields = new ArrayList<FieldInfo>();
 			int index = 1;
 			for(Field field:cls.getDeclaredFields()){
-				if(Grain.class.isAssignableFrom(field.getType())){
+				if(Property.class.isAssignableFrom(field.getType())){
 					fields.add(new FieldInfo(index++, field));
 				}
 			}
@@ -69,11 +69,11 @@ public class Corn {
 		return KEYS.get(cls);
 	}
 
-	public List<Grain> properties(){
+	public List<Property> properties(){
 		try{
-			List<Grain> properties = new ArrayList<Grain>();
+			List<Property> properties = new ArrayList<Property>();
 			for(FieldInfo info:fields()){
-				properties.add((Grain)info.field.get(this));
+				properties.add((Property)info.field.get(this));
 			}
 			return properties;
 		}catch(Exception e){
@@ -86,8 +86,8 @@ public class Corn {
 		return fields().get(pindex++);
 	}
 	
-	public Grain property(String name) {
-		for(Grain property:properties()){
+	public Property property(String name) {
+		for(Property property:properties()){
 			if(property.name().equals(name)){
 				return property;
 			}
@@ -95,9 +95,9 @@ public class Corn {
 		return null;
 	}
 	
-	public Set<Grain> changes(){
-		Set<Grain> changes = new HashSet<Grain>();
-		for(Grain property:properties()){
+	public Set<Property> changes(){
+		Set<Property> changes = new HashSet<Property>();
+		for(Property property:properties()){
 			if(property.changed()){
 				changes.add(property);
 			}
@@ -105,7 +105,7 @@ public class Corn {
 		return changes;
 	}
 	
-	public Class<? extends Corn> type() {
+	public Class<? extends Bean> type() {
 		return clazz();
 	}
 	
@@ -117,26 +117,26 @@ public class Corn {
 		return changes().size()>0;
 	}
 	
-	public <T extends Corn> T rollback(){
-		for(Grain property:changes()){
+	public <T extends Bean> T rollback(){
+		for(Property property:changes()){
 			property.rollback();
 		}
 		return (T) this;
 	}
-	public <T extends Corn> T normalize(){
+	public <T extends Bean> T normalize(){
 		return (T) this;
 	}
-	public <T extends Corn> T commit(){
+	public <T extends Bean> T commit(){
 		validate();
-		for(Grain property:changes()){
+		for(Property property:changes()){
 			property.commit();
 		}
 		return (T)this;
 	}
 	
-	public <T extends Corn> T validate() throws ValidationException {
+	public <T extends Bean> T validate() throws ValidationException {
 		normalize();
-		for(Grain property:properties()){
+		for(Property property:properties()){
 			property.validate();
 		}
 		return (T)this;
@@ -145,24 +145,24 @@ public class Corn {
 	public Object get(SeedView view) {
 		return this;
 	}
-	public Corn set(SeedView view, Object value) {
+	public Bean set(SeedView view, Object value) {
 		return null;
 	}
-	{Printer.add(new CornPrinter());}
+	{Printer.add(new BeanPrinter());}
 }
 
-class CornPrinter extends Printer.ObjectPrinter{
+class BeanPrinter extends Printer.ObjectPrinter{
 
 	@Override
 	public boolean support(Object val) {
-		return val!=null && Corn.class.isAssignableFrom(val.getClass());
+		return val!=null && Bean.class.isAssignableFrom(val.getClass());
 	}
 
 	@Override
 	public void print(Printer.Cursor cursor, Appendable buf, Object val) throws IOException {
-		Corn map = (Corn)val;
+		Bean map = (Bean)val;
 		append(buf,map.type().getSimpleName(), ANSI.Color.BLUE);
-		for (Grain property:map.properties()){
+		for (Property property:map.properties()){
 			cursor.enter(property.name());
 			nl(buf);
 			ident(buf,cursor.level());

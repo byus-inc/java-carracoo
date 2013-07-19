@@ -5,10 +5,8 @@
 package org.carracoo.seeds.models;
 
 import org.carracoo.seeds.SeedView;
-import org.carracoo.seeds.lang.grains.DATE;
-import org.carracoo.seeds.lang.grains.STRING;
-import org.carracoo.seeds.lang.grains.DATE;
-import org.carracoo.seeds.lang.grains.STRING;
+import org.carracoo.seeds.lang.properties.DateProperty;
+import org.carracoo.seeds.lang.properties.StringProperty;
 
 import java.util.Date;
 
@@ -18,13 +16,13 @@ import java.util.Date;
  */
 public class User extends Document {
 	
-	public final STRING<User> id			= new STRING<User>()	{
+	public final StringProperty<User> id			= new StringProperty<User>()	{
 		
 	};
-	public final STRING<User>		name		= new STRING<User>()	{
+	public final StringProperty<User> name		= new StringProperty<User>()	{
 		{required(true);multiple(false);}
 	};
-	public final STRING<User>		password	= new STRING<User>()	{
+	public final StringProperty<User> password	= new StringProperty<User>()	{
 		@Override
 		public User parent() {
 			return User.this;
@@ -36,7 +34,7 @@ public class User extends Document {
 		}
 		
 	};
-	public final STRING<User>		email		= new STRING<User>()	{
+	public final StringProperty<User> email		= new StringProperty<User>()	{
 		@Override
 		public User parent() {
 			return User.this;
@@ -46,21 +44,21 @@ public class User extends Document {
 			return view.isRoot() || view.path().match("author.email");
 		}
 	};
-	public final DATE<User> createdAt	= new DATE<User>()		{
+	public final DateProperty<User> createdAt	= new DateProperty<User>()		{
 		{set(new Date());}
 		@Override
 		public boolean available(SeedView view) {
 			return view.isRoot() || view.path().match("author.email");
 		}
 	};
-	public final DATE<User>			updatedAt	= new DATE<User>()		{
+	public final DateProperty<User> updatedAt	= new DateProperty<User>()		{
 		{set(new Date());}
 		@Override
 		public boolean available(SeedView view) {
 			return view.isRoot() || view.path().match("author.email");
 		}
 	};	
-	public final STRING<User>		links		= new STRING<User>()	{
+	public final StringProperty<User> links		= new StringProperty<User>()	{
 		{multiple(true);}
 		@Override
 		public User parent() {

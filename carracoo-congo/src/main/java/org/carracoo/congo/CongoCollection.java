@@ -1,19 +1,14 @@
 package org.carracoo.congo;
 
 import com.mongodb.*;
-import org.bson.types.ObjectId;
-import org.carracoo.bson.BSON;
 import org.carracoo.congo.parsing.SeedDecoderFactory;
 import org.carracoo.congo.parsing.SeedEncoderFactory;
 import org.carracoo.congo.parsing.SeedObject;
 import org.carracoo.congo.parsing.SeedQuery;
-import org.carracoo.json.JSON;
-import org.carracoo.seeds.lang.Corn;
-import org.carracoo.seeds.lang.Grain;
-import org.carracoo.seeds.lang.grains.IDENTIFIER;
+import org.carracoo.seeds.lang.Bean;
+import org.carracoo.seeds.lang.Property;
+import org.carracoo.seeds.lang.properties.IdentifierProperty;
 import org.carracoo.utils.StringUtils;
-
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,7 +17,7 @@ import java.util.Map;
  * Time: 3:47 PM
  * To change this template use File | Settings | File Templates.
  */
-public class CongoCollection<T extends Corn>{
+public class CongoCollection<T extends Bean>{
 
 	public CongoCollection(CongoDatabase database, Class<T> model){
 		this.database   = database;
@@ -50,9 +45,9 @@ public class CongoCollection<T extends Corn>{
 	}
 
 	public void save(T model){
-		Grain id = model.property("id");
-		if(id!=null && id instanceof IDENTIFIER){
-			((IDENTIFIER)id).generate();
+		Property id = model.property("id");
+		if(id!=null && id instanceof IdentifierProperty){
+			((IdentifierProperty)id).generate();
 		}
 		mongo().save(new SeedObject(model));
 	}

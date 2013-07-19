@@ -1,8 +1,8 @@
-package org.carracoo.seeds.mapper.grain;
+package org.carracoo.seeds.mapper.property;
 
 import org.carracoo.seeds.SeedView;
-import org.carracoo.seeds.lang.Corn;
-import org.carracoo.seeds.lang.Grain;
+import org.carracoo.seeds.lang.Bean;
+import org.carracoo.seeds.lang.Property;
 import org.carracoo.utils.ObjectUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ import java.util.Map;
  * Time: 3:18 AM
  * To change this template use File | Settings | File Templates.
  */
-public class GrainEncoder {
+public class PropertyEncoder {
 	
 	public Object encode(SeedView view, Object model) {
 		return encodeValue(view, model);
@@ -38,8 +38,8 @@ public class GrainEncoder {
 		if(info.isSimple()){
 			return model;
 		}else
-		if(model instanceof Corn){
-			return encodeModel(view, (Corn)model);
+		if(model instanceof Bean){
+			return encodeModel(view, (Bean)model);
 		}else{
 			return model.getClass().getSimpleName()+"(\""+model.toString()+"\")";
 		}
@@ -70,13 +70,13 @@ public class GrainEncoder {
 		return res;
 	}
 	
-	private Object encodeModel(SeedView view, Corn model) {
+	private Object encodeModel(SeedView view, Bean model) {
 		HashMap object = new LinkedHashMap();
 		Object converted  = model.get(view);
 		if(!model.equals(converted)){
 			return encodeValue(view,converted);
 		}
-		for(Grain property : model.properties()){
+		for(Property property : model.properties()){
 			view.enter(property);
 			if(property.available(view)){
 				if(property.multiple()){

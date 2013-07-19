@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.carracoo.seeds.mapper.grain;
+package org.carracoo.seeds.mapper.property;
 
 import org.carracoo.seeds.SeedMapper;
 import org.carracoo.seeds.SeedView;
@@ -11,16 +11,16 @@ import org.carracoo.seeds.SeedView;
  *
  * @author Sergey
  */
-public class GrainMapper implements SeedMapper {
+public class PropertyMapper implements SeedMapper {
 
 	@Override
 	public Object encode(SeedView view, Object object) {
-		return new GrainEncoder().encode(view, object);
+		return new PropertyEncoder().encode(view, object);
 	}
 
 	@Override
 	public <T> T decode(SeedView view, Object value, Class<T> type) {
-		return new GrainDecoder().decode(view, value, type);
+		return new PropertyDecoder().decode(view, value, type);
 	}
 	
 }

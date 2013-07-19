@@ -1,8 +1,8 @@
-package org.carracoo.seeds.mapper.grain;
+package org.carracoo.seeds.mapper.property;
 
 import org.carracoo.seeds.SeedView;
-import org.carracoo.seeds.lang.Corn;
-import org.carracoo.seeds.lang.Grain;
+import org.carracoo.seeds.lang.Bean;
+import org.carracoo.seeds.lang.Property;
 import org.carracoo.utils.ObjectUtils;
 
 import java.lang.reflect.Array;
@@ -17,7 +17,7 @@ import java.util.Map;
  * Time: 3:18 AM
  * To change this template use File | Settings | File Templates.
  */
-public class GrainDecoder  {
+public class PropertyDecoder {
 	
 	public <T> T decode(SeedView view, Object value, Class<T> type) {
 		return decodeValue(view, value, type);
@@ -25,10 +25,10 @@ public class GrainDecoder  {
 
 	private <T> T decodeValue(SeedView view, Object encoded, Class<T> clazz) {
 		if(clazz!=null){
-			if(Corn.class.isAssignableFrom(clazz)){
+			if(Bean.class.isAssignableFrom(clazz)){
 				return (T) decodeModel(view, encoded, clazz);
 			}
-			if(clazz.isArray() && Corn.class.isAssignableFrom(clazz.getComponentType())){
+			if(clazz.isArray() && Bean.class.isAssignableFrom(clazz.getComponentType())){
 				return (T) decodeArray(view, encoded, clazz);
 			}
 		}
@@ -42,7 +42,7 @@ public class GrainDecoder  {
 			target = new Object[]{encoded};
 		}
 		
-		List<Corn> list = new ArrayList<Corn>();
+		List<Bean> list = new ArrayList<Bean>();
 		int index=0;
 		for(Object item:ObjectUtils.iterable(target)){
 			view.enter(index++);
@@ -54,18 +54,18 @@ public class GrainDecoder  {
 		return arr;
 	}
 	
-	private Corn decodeModel(SeedView view, Object value, Class<?> type) {
+	private Bean decodeModel(SeedView view, Object value, Class<?> type) {
 		try{
 			if(value==null){
 				return null;
 			}
-			if(Corn.class.isAssignableFrom(type)){
-				Corn model = (Corn) type.newInstance();
+			if(Bean.class.isAssignableFrom(type)){
+				Bean model = (Bean) type.newInstance();
 				if(model.equals(model.set(view,value))){
 					return model;
 				}else if(value instanceof Map){
 					Map map = (Map)value;
-					for(Grain property:model.properties()){
+					for(Property property:model.properties()){
 						if(map.containsKey(property.name())){
 							view.enter(property);
 							if(property.multiple()){

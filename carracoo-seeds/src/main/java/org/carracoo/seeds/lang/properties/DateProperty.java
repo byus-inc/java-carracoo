@@ -2,17 +2,18 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.carracoo.seeds.lang.grains;
+package org.carracoo.seeds.lang.properties;
 
 import org.carracoo.seeds.SeedView;
-import org.carracoo.seeds.lang.Corn;
+import org.carracoo.seeds.lang.Bean;
+
 import java.util.Date;
 
 /**
  *
  * @author Sergey
  */
-public abstract class DATE<P extends Corn> extends GRAIN<P, Date> {
+public abstract class DateProperty<P extends Bean> extends BeanProperty<P, Date> {
 
 	@Override
 	public final Class<?> type() {

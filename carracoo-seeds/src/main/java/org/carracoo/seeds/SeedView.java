@@ -4,7 +4,8 @@
  */
 package org.carracoo.seeds;
 
-import org.carracoo.seeds.lang.Grain;
+import org.carracoo.seeds.lang.Property;
+
 import java.util.Stack;
 
 /**
@@ -57,7 +58,7 @@ public class SeedView {
 	public boolean isRoot() {
 		return path.size()==1;
 	}
-	public void enter(Grain property) {
+	public void enter(Property property) {
 		enter(property.parent().getClass().getSimpleName()+":"+property.type().getSimpleName()+":"+property.name());
 	}
 	public void enter(int i) {

@@ -5,7 +5,7 @@ import org.carracoo.congo.parsing.SeedDecoderFactory;
 import org.carracoo.congo.parsing.SeedEncoderFactory;
 import org.carracoo.seeds.SeedView;
 import org.carracoo.seeds.Seeds;
-import org.carracoo.seeds.lang.Corn;
+import org.carracoo.seeds.lang.Bean;
 
 import java.net.UnknownHostException;
 
@@ -56,7 +56,7 @@ public class CongoDatabase {
 		}
 	}
 
-	public <T extends Corn> CongoCollection<T> collection(Class<T> cls){
+	public <T extends Bean> CongoCollection<T> collection(Class<T> cls){
 		return new CongoCollection<T>(this,cls);
 	}
 }

@@ -4,8 +4,8 @@
  */
 package org.carracoo.seeds;
 
-import org.carracoo.seeds.mapper.grain.GrainDecoder;
-import org.carracoo.seeds.mapper.grain.GrainEncoder;
+import org.carracoo.seeds.mapper.property.PropertyDecoder;
+import org.carracoo.seeds.mapper.property.PropertyEncoder;
 import org.carracoo.seeds.models.Comment;
 import org.carracoo.seeds.models.Post;
 import org.carracoo.seeds.models.Simple;
@@ -14,12 +14,6 @@ import org.carracoo.bson.BsonParser;
 import org.carracoo.json.JsonParser;
 import org.carracoo.utils.Printer;
 import junit.framework.TestCase;
-import org.carracoo.bson.BsonParser;
-import org.carracoo.json.JsonParser;
-import org.carracoo.seeds.mapper.grain.GrainDecoder;
-import org.carracoo.seeds.mapper.grain.GrainEncoder;
-import org.carracoo.seeds.models.Comment;
-import org.carracoo.seeds.models.Simple;
 
 /**
  *
@@ -101,8 +95,8 @@ public class SeedsTest extends TestCase {
 	
 	public void _testMapping() {		
 		System.out.println(post);
-		GrainEncoder encoder = new GrainEncoder();
-		GrainDecoder decoder = new GrainDecoder();
+		PropertyEncoder encoder = new PropertyEncoder();
+		PropertyDecoder decoder = new PropertyDecoder();
 		Object encoded = encoder.encode(new SeedView("json"),post);
 		print(encoded);
 		Post[]  decoded = decoder.decode(new SeedView("json"),encoded,Post[].class);

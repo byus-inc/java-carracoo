@@ -4,10 +4,8 @@
  */
 package org.carracoo.seeds.models;
 
-import org.carracoo.seeds.lang.grains.GRAIN;
-import org.carracoo.seeds.lang.grains.STRING;
-import org.carracoo.seeds.lang.grains.GRAIN;
-import org.carracoo.seeds.lang.grains.STRING;
+import org.carracoo.seeds.lang.properties.BeanProperty;
+import org.carracoo.seeds.lang.properties.StringProperty;
 
 /**
  *
@@ -15,19 +13,19 @@ import org.carracoo.seeds.lang.grains.STRING;
  */
 
 public class Post extends Document {
-	public final STRING<Post> id			= new STRING<Post>()		{
+	public final StringProperty<Post> id			= new StringProperty<Post>()		{
 		
 	};
-	public final STRING	<Post>			title		= new STRING<Post>()		{
+	public final StringProperty<Post> title		= new StringProperty<Post>()		{
 		
 	};
-	public final STRING	<Post>			content		= new STRING<Post>()		{
+	public final StringProperty<Post> content		= new StringProperty<Post>()		{
 		
 	};
-	public final GRAIN<Post,User> author		= new GRAIN<Post,User>()	{
+	public final BeanProperty<Post,User> author		= new BeanProperty<Post,User>()	{
 		
 	};
-	public final GRAIN	<Post,Comment>	comments	= new GRAIN<Post,Comment>(){
+	public final BeanProperty<Post,Comment> comments	= new BeanProperty<Post,Comment>(){
 		{multiple(true);}
 	};
 }

@@ -2,16 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.carracoo.seeds.lang.grains;
+package org.carracoo.seeds.lang.properties;
 
 import org.carracoo.seeds.SeedView;
-import org.carracoo.seeds.lang.Corn;
+import org.carracoo.seeds.lang.Bean;
 
 /**
  *
  * @author Sergey
  */
-public abstract class ENUM<P extends Corn,V extends Enum> extends GRAIN<P, V>{
+public abstract class EnumProperty<P extends Bean,V extends Enum> extends BeanProperty<P, V> {
 	public static <T extends Enum<T>> T valueOfIgnoreCase(Class<T> enumeration, String name) {
 		for(Enum enumValue : enumeration.getEnumConstants()) {
 			if(enumValue.name().equalsIgnoreCase(name)) {

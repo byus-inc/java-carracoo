@@ -4,7 +4,7 @@ import com.mongodb.DBEncoder;
 import com.mongodb.DBEncoderFactory;
 import org.carracoo.seeds.SeedView;
 import org.carracoo.seeds.Seeds;
-import org.carracoo.seeds.lang.Corn;
+import org.carracoo.seeds.lang.Bean;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,9 +17,9 @@ public class SeedEncoderFactory implements DBEncoderFactory {
 
 	private final Seeds seeds;
 	private final SeedView view;
-	private final Class<? extends Corn> model;
+	private final Class<? extends Bean> model;
 
-	public SeedEncoderFactory(Seeds seeds, SeedView view, Class<? extends Corn> model){
+	public SeedEncoderFactory(Seeds seeds, SeedView view, Class<? extends Bean> model){
 		this.seeds = seeds;
 		this.view = view;
 		this.model = model;

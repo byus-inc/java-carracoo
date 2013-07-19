@@ -4,22 +4,21 @@
  */
 package org.carracoo.seeds.models;
 
-import org.carracoo.seeds.lang.Corn;
-import org.carracoo.seeds.lang.grains.GRAIN;
-import org.carracoo.seeds.lang.grains.GRAIN;
+import org.carracoo.seeds.lang.Bean;
+import org.carracoo.seeds.lang.properties.BeanProperty;
 
 /**
  *
  * @author Sergey
  */
-public class Simple extends Corn {
-	public final GRAIN<Simple,String> p1	= new GRAIN<Simple,String>(){
+public class Simple extends Bean {
+	public final BeanProperty<Simple,String> p1	= new BeanProperty<Simple,String>(){
 		
 	};
-	public final GRAIN<Simple,Simple>		p2	= new GRAIN<Simple,Simple>(){
+	public final BeanProperty<Simple,Simple> p2	= new BeanProperty<Simple,Simple>(){
 		
 	};
-	public final GRAIN<Simple,String>		p3	= new GRAIN<Simple,String>(){
+	public final BeanProperty<Simple,String> p3	= new BeanProperty<Simple,String>(){
 		
 	};
 }

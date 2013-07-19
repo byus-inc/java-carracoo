@@ -1,7 +1,7 @@
 package org.carracoo.seeds;
 
-import org.carracoo.seeds.lang.Corn;
-import org.carracoo.seeds.mapper.grain.GrainMapper;
+import org.carracoo.seeds.lang.Bean;
+import org.carracoo.seeds.mapper.property.PropertyMapper;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,7 +21,7 @@ public class Seeds {
 	private final SeedMapper mapper;
 	
 	public Seeds(){
-		this(new GrainMapper());
+		this(new PropertyMapper());
 	}
 	
 	public Seeds(SeedMapper mapper){
@@ -60,7 +60,7 @@ public class Seeds {
 	}
 	
 	public <T> T decode(SeedView view, byte[] bytes, Class<T> type){
-		if(type!=null && Corn.class.isAssignableFrom(type)){
+		if(type!=null && Bean.class.isAssignableFrom(type)){
 			return decodeMap(view,parser(view).decode(bytes),type);
 		}else{
 			return (T) parser(view).decode(bytes);

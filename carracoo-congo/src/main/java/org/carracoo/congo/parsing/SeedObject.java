@@ -2,9 +2,8 @@ package org.carracoo.congo.parsing;
 
 import com.mongodb.DBObject;
 import org.bson.BSONObject;
-import org.carracoo.seeds.lang.Corn;
+import org.carracoo.seeds.lang.Bean;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,7 +23,7 @@ public class SeedObject implements DBObject {
 	}
 
 	private boolean isModel(){
-		return target instanceof Corn;
+		return target instanceof Bean;
 	}
 
 	private boolean isMap(){
@@ -35,8 +34,8 @@ public class SeedObject implements DBObject {
 		target = model;
 	}
 
-	public Corn toModel() {
-		return (Corn)target;
+	public Bean toModel() {
+		return (Bean)target;
 	}
 
 	@Override

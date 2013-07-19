@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.carracoo.seeds.lang.grains;
+package org.carracoo.seeds.lang.properties;
 
 import org.carracoo.seeds.exceptions.ValidationException;
-import org.carracoo.seeds.lang.Corn;
+import org.carracoo.seeds.lang.Bean;
 
 import java.util.regex.Pattern;
 
@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  *
  * @author Sergey
  */
-public abstract class STRING<P extends Corn> extends GRAIN<P, String> {
+public abstract class StringProperty<P extends Bean> extends BeanProperty<P, String> {
 	private Pattern format;
 	@Override
 	public final Class<?> type() {

@@ -30,7 +30,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.carracoo</groupId>
-			<artifactId>carracoo-jongo</artifactId>
+			<artifactId>carracoo-congo</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

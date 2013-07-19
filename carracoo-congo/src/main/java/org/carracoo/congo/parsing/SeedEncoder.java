@@ -1,12 +1,11 @@
 package org.carracoo.congo.parsing;
 
 import com.mongodb.DBEncoder;
-import com.mongodb.DBObject;
 import org.bson.BSONObject;
 import org.bson.io.OutputBuffer;
 import org.carracoo.seeds.SeedView;
 import org.carracoo.seeds.Seeds;
-import org.carracoo.seeds.lang.Corn;
+import org.carracoo.seeds.lang.Bean;
 
 import java.util.Map;
 
@@ -21,9 +20,9 @@ public class SeedEncoder implements DBEncoder {
 
 	private final Seeds seeds;
 	private final SeedView view;
-	private final Class<? extends Corn> model;
+	private final Class<? extends Bean> model;
 
-	public SeedEncoder(Seeds seeds, SeedView view, Class<? extends Corn> model){
+	public SeedEncoder(Seeds seeds, SeedView view, Class<? extends Bean> model){
 		this.seeds = seeds;
 		this.view = view;
 		this.model = model;

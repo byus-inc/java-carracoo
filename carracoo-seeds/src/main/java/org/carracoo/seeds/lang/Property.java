@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author Sergey
  */
-public abstract class Grain<P extends Corn,V> implements Iterable<V> {
+public abstract class Property<P extends Bean,V> implements Iterable<V> {
 	
 	// Property specific settings
 	private int			index;
@@ -118,8 +118,8 @@ public abstract class Grain<P extends Corn,V> implements Iterable<V> {
 	
 	public P validate() throws ValidationException {
 		normalize();
-		if(!isNull() && Corn.class.isAssignableFrom(get().getClass())){
-			((Corn)get()).validate();
+		if(!isNull() && Bean.class.isAssignableFrom(get().getClass())){
+			((Bean)get()).validate();
 		}
 		if(required() && isNull()){
 			throw new ValidationException("property '"+name()+"' required");
@@ -131,8 +131,8 @@ public abstract class Grain<P extends Corn,V> implements Iterable<V> {
 		validate();
 		this.changed	= false;
 		this.old		= null;
-		if(!isNull() && Corn.class.isAssignableFrom(get().getClass())){
-			((Corn)get()).commit();
+		if(!isNull() && Bean.class.isAssignableFrom(get().getClass())){
+			((Bean)get()).commit();
 		}
 		return parent();
 	}
@@ -158,32 +158,32 @@ public abstract class Grain<P extends Corn,V> implements Iterable<V> {
 	final public	boolean unique(){
 		return unique;
 	}
-	final protected Grain<P,V>	limit(int value){
+	final protected Property<P,V> limit(int value){
 		limit = value;return this;
 	}
-	final protected	Grain<P,V>	multiple(int value) { 
+	final protected Property<P,V> multiple(int value) {
 		return limit(value);
 	}
-	final protected	Grain<P,V>	multiple(boolean value){ 
+	final protected Property<P,V> multiple(boolean value){
 		return limit(value?Integer.MAX_VALUE:1);
 	}
-	final protected	Grain<P,V>   required(boolean value){ 
+	final protected Property<P,V> required(boolean value){
 		required=value;return this;
 	}
-	final protected	Grain<P,V>   unique(boolean value){
+	final protected Property<P,V> unique(boolean value){
 		unique=value;return this;
 	}
-	public Grain(){
+	public Property(){
 		try {
 			Field p = this.getClass().getDeclaredField("this$0");
-			if(Corn.class.isAssignableFrom(p.getType())){
+			if(Bean.class.isAssignableFrom(p.getType())){
 				p.setAccessible(true);
 				parent = (P) p.get(this);
 				if(!this.getClass().getEnclosingClass().equals(parent.clazz())){
 					throw new RuntimeException("Grain definition should be in parent class <"+this.getClass().getEnclosingClass()+","+ parent.clazz()+">");
 				}
-				type = ReflectUtils.getTypeArguments(Grain.class, (Class<Grain>) getClass()).get(1);
-				Corn.FieldInfo f = parent.field();
+				type = ReflectUtils.getTypeArguments(Property.class, (Class<Property>) getClass()).get(1);
+				Bean.FieldInfo f = parent.field();
 				if(f!=null){
 					this.name   = f.field.getName();
 					this.index  = f.index;
