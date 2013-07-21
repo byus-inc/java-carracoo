@@ -1,5 +1,6 @@
 package org.carracoo.beans.lang;
 
+import org.carracoo.beans.AbstractOptions;
 import org.carracoo.beans.AbstractProperty;
 import org.carracoo.beans.exceptions.BeanValidationException;
 
@@ -14,8 +15,16 @@ import java.util.*;
  */
 public class ValueProperty<V> extends AbstractProperty<V> implements Iterable<V> {
 
-	protected ValueOptions options(){
-		return (ValueOptions) options;
+	public static class Options extends AbstractOptions {
+		public Boolean multiple     = false;
+		public Boolean required     = false;
+		public Boolean unique       = false;
+		public Boolean ordered      = false;
+		public Class   container    = null;
+	}
+
+	protected Options options(){
+		return (Options) options;
 	}
 
 	protected V value;

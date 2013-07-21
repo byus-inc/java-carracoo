@@ -15,25 +15,25 @@ import org.carracoo.beans.lang.*;
 public class Post implements Bean {
 	
 	public final StringProperty id    = new StringProperty(){
-		class Id extends StringOptions {{
+		class Id extends Options {{
 			required = true;
 			unique   = true;
 		}}
 	};
 
 	public final StringProperty title  = new StringProperty(){
-		class Title extends StringOptions {{
+		class Title extends Options {{
 
 		}}
 	};
 
 	public final UserProperty owner = new UserProperty(){
-		class Owner extends ValueOptions {{
+		class Owner extends Options {{
 		}}
 	};
 
 	public final CommentProperty comments = new CommentProperty(){
-		class Comments extends ValueOptions {{
+		class Comments extends Options {{
 			multiple = true;
 		}}
 	};

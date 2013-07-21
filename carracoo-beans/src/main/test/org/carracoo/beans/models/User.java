@@ -14,7 +14,7 @@ import org.carracoo.beans.lang.*;
 public class User implements Bean,View.BeanEncoder,View.BeanDecoder {
 
 	public final StringProperty id    = new StringProperty(){
-		class Id extends StringOptions implements View.Value,View.Key {
+		class Id extends Options implements View.Value,View.Key {
 			public Id() {
 				required = true;
 				unique   = true;
@@ -32,17 +32,17 @@ public class User implements Bean,View.BeanEncoder,View.BeanDecoder {
 		}
 	};
 	public final StringProperty name  = new StringProperty(){
-		class Name extends StringOptions {{
+		class Name extends Options {{
 
 		}}
 	};
 	public final EmailProperty  email = new EmailProperty(){
-		class Email extends EmailOptions {{
+		class Email extends Options {{
 			required = true;
 		}}
 	};
 	public final StringProperty tags = new StringProperty(){
-		class Tags extends StringOptions implements View.Values{
+		class Tags extends Options implements View.Values{
 			public Tags() {
 				multiple = true;
 				unique   = true;

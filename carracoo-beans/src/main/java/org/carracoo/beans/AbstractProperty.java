@@ -23,7 +23,7 @@ public class AbstractProperty<T> {
 
 	final public AbstractOptions options;
 
-	public AbstractProperty(){
+	public AbstractProperty() {
 		AbstractOptions options = null;
 		try {
 			if(!optionsCache.containsKey(this.getClass())){

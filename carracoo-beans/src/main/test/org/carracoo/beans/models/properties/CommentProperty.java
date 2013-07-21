@@ -11,8 +11,5 @@ import org.carracoo.beans.lang.ValueProperty;
  * To change this template use File | Settings | File Templates.
  */
 public class CommentProperty extends ValueProperty<Comment> {
-		
-	/*public CommentProperty(Bean bean){
-		super(bean);
-	}*/
+
 }

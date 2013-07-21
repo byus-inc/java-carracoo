@@ -13,7 +13,5 @@ import org.carracoo.beans.lang.ValueProperty;
  */
 public class UserProperty extends ValueProperty<User> {
 
-	/*public UserProperty(Object bean){
-		super(bean);
-	}*/
+
 }

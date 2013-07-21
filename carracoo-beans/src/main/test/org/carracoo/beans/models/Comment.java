@@ -1,10 +1,9 @@
 package org.carracoo.beans.models;
 
 import org.carracoo.beans.Bean;
+import org.carracoo.beans.lang.ValueProperty;
 import org.carracoo.beans.models.properties.UserProperty;
-import org.carracoo.beans.lang.StringOptions;
 import org.carracoo.beans.lang.StringProperty;
-import org.carracoo.beans.lang.ValueOptions;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,13 +15,13 @@ import org.carracoo.beans.lang.ValueOptions;
 public class Comment implements Bean {
 	
 	public final UserProperty author    = new UserProperty(){
-		class Author extends ValueOptions {{
+		class Author extends ValueProperty.Options {{
 			required = true;
 		}}
 	};
 
 	public final StringProperty message  = new StringProperty(){
-		class Title extends StringOptions {{
+		class Title extends Options {{
 			required = true;
 		}}
 	};

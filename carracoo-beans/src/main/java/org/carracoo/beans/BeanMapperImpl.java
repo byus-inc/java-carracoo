@@ -1,6 +1,5 @@
 package org.carracoo.beans;
 
-import org.carracoo.beans.lang.ValueOptions;
 import org.carracoo.beans.lang.ValueProperty;
 
 import java.util.*;
@@ -151,7 +150,7 @@ public class BeanMapperImpl implements BeanMapper {
 			String key;
 			Object val;
 
-			ValueOptions options = ((ValueOptions)property.options);
+			ValueProperty.Options options = ((ValueProperty.Options)property.options);
 			if(options instanceof View.Key){
 				key = ((View.Key)property.options).key(walker,property);
 			}else{
@@ -236,7 +235,7 @@ public class BeanMapperImpl implements BeanMapper {
 			if(value instanceof Map){
 				Map map = (Map)value;
 				for(ValueProperty property:factory.getProperties(model)){
-					ValueOptions options = (ValueOptions) property.options;
+					ValueProperty.Options options = (ValueProperty.Options) property.options;
 					String key = options.name;
 					Object val = map.get(options.name);
 					Object res = null;

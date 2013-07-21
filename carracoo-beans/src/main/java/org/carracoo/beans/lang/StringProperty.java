@@ -2,6 +2,8 @@ package org.carracoo.beans.lang;
 
 import org.carracoo.beans.exceptions.BeanValidationException;
 
+import java.util.regex.Pattern;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Sergey
@@ -10,10 +12,13 @@ import org.carracoo.beans.exceptions.BeanValidationException;
  * To change this template use File | Settings | File Templates.
  */
 public class StringProperty extends ValueProperty<String> {
+	public static class Options extends ValueProperty.Options {
+		public Pattern format = null;
+	}
 
 	@Override
-	protected StringOptions options() {
-		return (StringOptions) super.options();
+	protected Options options() {
+		return (Options) super.options();
 	}
 
 	@Override
@@ -29,5 +34,4 @@ public class StringProperty extends ValueProperty<String> {
 			}
 		}
 	}
-
 }
