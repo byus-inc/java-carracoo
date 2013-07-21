@@ -24,7 +24,7 @@ public class JSON {
 		return (T) new JsonDecoder().decode(data);
 	}
 
-	public static byte[] encode(Object value) {
-		return new JsonEncoder().encode(value);
+	public static String encode(Object value) {
+		return new String(new JsonEncoder().encode(value));
 	}
 }

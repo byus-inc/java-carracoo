@@ -4,9 +4,9 @@ import org.carracoo.beans.models.Comment;
 import org.carracoo.beans.models.Post;
 import org.carracoo.beans.models.User;
 import org.carracoo.utils.Printer;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
-import java.util.*;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.

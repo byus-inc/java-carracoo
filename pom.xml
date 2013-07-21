@@ -22,6 +22,7 @@
 		<module>carracoo-bson</module>
 		<module>carracoo-rest</module>
 		<module>carracoo-elastic</module>
+		<module>carracoo-congo</module>
 	</modules>
 
 	<properties>
@@ -57,12 +58,13 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.10</version>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.1.1</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
 	<build>
 		<pluginManagement>
 			<plugins>

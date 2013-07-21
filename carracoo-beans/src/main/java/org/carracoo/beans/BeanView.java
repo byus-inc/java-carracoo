@@ -152,4 +152,15 @@ public class BeanView implements Walker {
 		this.path.pop();
 	}
 
+	public Walker clone(){
+		BeanView v;
+		if(this.params!=null){
+			v = new BeanView(base()+"?%clone=TRUE");
+			v.params.putAll(this.params);
+			v.params.remove("%clone");
+		}else{
+			v = new BeanView(base());
+		}
+		return v;
+	}
 }

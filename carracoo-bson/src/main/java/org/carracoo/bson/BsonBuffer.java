@@ -116,7 +116,7 @@ public class BsonBuffer extends ByteArray {
 		if( Map.class.isAssignableFrom(cls)){
 			return DOCUMENT;
 		}
-		if( List.class.isAssignableFrom(cls)){
+		if( Iterable.class.isAssignableFrom(cls) || cls.isArray()){
 			return ARRAY;
 		} else {
 			return STRING;

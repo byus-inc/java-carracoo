@@ -57,16 +57,26 @@ public class BeanDefinition implements Iterable<ValueProperty> {
 
 	}
 
-	public ValueProperty getProperty(String name) throws BeanException{
+	public Boolean hasProperty(String name){
+		return properties.containsKey(name);
+	}
+
+	public ValueProperty getProperty(String name){
 		return properties.get(name);
 	}
-	public ValueProperty getProperty(Object bean, String name) throws BeanException{
+
+	public ValueProperty getProperty(Object bean, String name) throws BeanException {
 		try {
 			return ((ValueProperty) getProperty(name).options.field.get(bean));
 		} catch (IllegalAccessException e) {
 			throw new BeanException("property access exception "+name,e);
 		}
 	}
+
+	public Set<String> getKeys() {
+		return properties.keySet();
+	}
+
 	public Collection<ValueProperty> getProperties() {
 		return properties.values();
 	}

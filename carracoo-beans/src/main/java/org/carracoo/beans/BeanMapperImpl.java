@@ -77,8 +77,9 @@ public class BeanMapperImpl implements BeanMapper {
 
 	@Override
 	public <T> T encode(Walker walker, Object target) throws BeanMappingException {
-		initialize(walker);
-		return (T) encodeValue(walker,target);
+		Walker w = walker.clone();
+		initialize(w);
+		return (T) encodeValue(w,target);
 	}
 
 	private Object encodeValue(Walker walker, Object target) throws BeanMappingException {
@@ -199,8 +200,9 @@ public class BeanMapperImpl implements BeanMapper {
 
 	@Override
 	public <T> T decode(Walker walker, Object target, Class<T> type) throws BeanMappingException {
-		initialize(walker);
-		return (T) decodeValue(walker,target,type);
+		Walker w = walker.clone();
+		initialize(w);
+		return (T) decodeValue(w,target,type);
 	}
 
 	public Object decodeValue(Walker walker, Object target, Class<?> type) throws BeanMappingException {

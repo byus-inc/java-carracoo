@@ -11,4 +11,5 @@ public interface Walker extends View {
 	public void enter(Integer index);
 	public void enter(String path);
 	public void exit();
+	public Walker clone();
 }
