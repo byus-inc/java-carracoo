@@ -11,18 +11,17 @@
 	<groupId>org.carracoo</groupId>
 	<artifactId>carracoo</artifactId>
 	<packaging>pom</packaging>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>carracoo</name>
 	<url>https://github.com/casser/java-carracoo</url>
 
 	<modules>
 		<module>carracoo-utils</module>
-		<module>carracoo-seeds</module>
+		<module>carracoo-beans</module>
 		<module>carracoo-json</module>
 		<module>carracoo-bson</module>
-		<module>carracoo-congo</module>
-		<module>carracoo-tests</module>
 		<module>carracoo-rest</module>
+		<module>carracoo-elastic</module>
 	</modules>
 
 	<properties>

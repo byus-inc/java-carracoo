@@ -1,8 +1,8 @@
 package org.carracoo.rest;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
+import org.carracoo.utils.ANSI;
+
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,57 +13,69 @@ import java.net.HttpURLConnection;
  */
 public class RestResponse {
 
-	public RestResponse(HttpURLConnection connection) throws IOException {
-		this.status = RestStatus.valueOf(connection.getResponseCode());
-		if(this.status.success){
-			this.stream = connection.getInputStream();
+	private static final Logger logger = Logger.getLogger(RestResponse.class.getSimpleName());
+
+	public RestResponse (
+		RestRequest request,
+		RestStatus status,
+		RestHeaders headers,
+		RestBody body
+	){
+		this.request     = request;
+		this.status      = status;
+		this.body        = body;
+		if(headers==null){
+			this.headers = new RestHeaders(0);
 		}else{
-			this.stream = connection.getErrorStream();
+			this.headers = headers;
 		}
-		headers.putAll(connection.getHeaderFields());
-		contentType = contentType();
 	}
 
-	private final String contentType;
-	public String contentType(){
-		return contentType;
+	final
+	private RestRequest request;
+	public  RestRequest request(){
+		return request;
 	}
 
-	private final RestStatus status;
-	public RestStatus status(){
+	final
+	private RestStatus status;
+	public  RestStatus status(){
 		return status;
 	}
 
-	private final InputStream stream;
-	public InputStream stream(){
-		return stream;
+	final
+	private RestBody body;
+	public  RestBody body(){
+		return body;
 	}
 
-	private final RestHeaders   headers = new RestHeaders();
-	public  RestResponse        header(String key, Object value){
+	public  <T> T body(Class<T> type) {
+		return null;
+	}
+
+	final
+	private RestHeaders   headers;
+	public  RestResponse  header(String key, Object value){
 		headers.put(key,value); return this;
 	}
-	public  RestHeaders         headers(){
+	public  RestHeaders   headers(){
 		return headers;
 	}
-	private String text;
-	public  String text() {
-		if(text==null){
-			try{
-				StringBuffer buffer = new StringBuffer();
-				int ch;
-				while ((ch = stream.read()) != -1){
-					buffer.append((char)ch);
-				}
-				text = buffer.toString();
-			}catch (Exception ex){
-				text = "";
-			}
-		}
-		return text;
-	}
 
-	public Boolean is(String contentType) {
-		return contentType.equals(contentType);
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		ANSI.append(sb, "REQUEST", ANSI.Color.CYAN);
+		sb.append(" ").append(request);
+		ANSI.append(sb, "RESPONSE", ANSI.Color.CYAN);
+		sb.append(" ");
+		ANSI.append(sb, status.code+" "+status.message, status.success ? ANSI.Color.GREEN:ANSI.Color.RED);
+		sb.append("\n");
+		sb.append(headers);
+		sb.append(body);
+		sb.append("\n");
+		ANSI.append(sb, "END", ANSI.Color.CYAN);
+		sb.append("\n");
+		return sb.toString();    //To change body of overridden methods use File | Settings | File Templates.
 	}
 }

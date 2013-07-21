@@ -3,18 +3,12 @@
 	<parent>
 		<artifactId>carracoo</artifactId>
 		<groupId>org.carracoo</groupId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.0.2-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<name>carracoo-bson</name>
 	<artifactId>carracoo-bson</artifactId>
 	<dependencies>
-		<dependency>
-			<groupId>org.carracoo</groupId>
-			<artifactId>carracoo-seeds</artifactId>
-			<version>${project.version}</version>
-			<scope>provided</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.carracoo</groupId>
 			<artifactId>carracoo-utils</artifactId>

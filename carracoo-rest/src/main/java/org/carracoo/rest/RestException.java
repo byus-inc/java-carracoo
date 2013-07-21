@@ -15,8 +15,12 @@ public class RestException extends Exception {
 	}
 
 	public RestException(RestResponse response){
-		super(response.text());
 		this.response = response;
+	}
+
+	public RestException(String message){
+		super(message);
+		response = null;
 	}
 
 	public RestException(String message, Throwable cause){

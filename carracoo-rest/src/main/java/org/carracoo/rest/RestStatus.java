@@ -43,7 +43,8 @@ public enum RestStatus {
 	HTTP_BAD_GATEWAY            (502,false,"Bad Gateway"),
 	HTTP_UNAVAILABLE            (503,false,"Service Unavailable"),
 	HTTP_GATEWAY_TIMEOUT        (504,false,"Gateway Timeout"),
-	HTTP_VERSION                (505,false,"HTTP Version Not Supported")
+	HTTP_VERSION                (505,false,"HTTP Version Not Supported"),
+	CONNECTION_FAILED           (600,false,"Connection failed")
 	;
 
 	public final Integer code;

@@ -13,6 +13,11 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class Printer {
 
+	public static String simpleType(Object obj){
+		String name = obj==null?"null":obj.getClass().getName();
+		return name.substring(name.lastIndexOf('.')+1,name.length());
+	}
+
 	public static class Cursor {
 		public static class Path extends Stack<String> {
 			@Override
@@ -131,6 +136,7 @@ public class Printer {
 			append(buf, val.toString(), ANSI.Color.BLUE);
 		}
 	}
+
 	public static class ArrayPrinter extends ObjectPrinter {
 		@Override
 		public boolean support(Object val) {
@@ -141,7 +147,8 @@ public class Printer {
 
 		}
 		public void print(Cursor cursor, Appendable buf, Object val) throws IOException {
-			append(buf,"ARRAY", ANSI.Color.MAGENTA);
+
+			append(buf,"["+simpleType(val)+"]", ANSI.Color.MAGENTA);
 			if(val instanceof Iterable){
 				Iterable it = (Iterable)val;
 				Integer index = 0;
@@ -187,7 +194,7 @@ public class Printer {
 		public void print(Cursor cursor, Appendable buf, Object val) throws IOException {
 			Map<Object,Object> map = (Map<Object,Object>)val;
 			int index = 0;
-			append(buf,"OBJECT", ANSI.Color.BLUE);
+			append(buf,"{"+simpleType(val)+"}", ANSI.Color.BLUE);
 			for (Map.Entry<Object,Object> entry:map.entrySet()){
 				String key = getKey(entry.getKey(), index++);
 				cursor.enter(key);

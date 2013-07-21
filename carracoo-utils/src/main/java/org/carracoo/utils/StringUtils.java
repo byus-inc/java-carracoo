@@ -1,5 +1,9 @@
 package org.carracoo.utils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
 public class StringUtils {
 	public static final String EMPTY = "";
 
@@ -201,7 +205,20 @@ public class StringUtils {
 		return result;
 	}
 
-
+	public static String urlEncode(String val){
+		try{
+			return URLEncoder.encode(val, "UTF-8").replaceAll("\\+","%20");
+		}catch (UnsupportedEncodingException ex){
+			return val;
+		}
+	}
+	public static String urlDecode(String val){
+		try{
+			return URLDecoder.decode(val, "UTF-8");
+		}catch (UnsupportedEncodingException ex){
+			return val;
+		}
+	}
 	private static Boolean isDigit( char ch){
 		return ( ch >= '0' && ch <= '9' );
 	}
