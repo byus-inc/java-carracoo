@@ -1,12 +1,10 @@
 package org.carracoo.beans.models;
 
 import org.carracoo.beans.Bean;
-import org.carracoo.beans.View;
 import org.carracoo.beans.models.properties.UserProperty;
-import org.carracoo.beans.stl.StringOptions;
-import org.carracoo.beans.stl.StringProperty;
-import org.carracoo.beans.stl.ValueOptions;
-import org.carracoo.beans.stl.ValueProperty;
+import org.carracoo.beans.lang.StringOptions;
+import org.carracoo.beans.lang.StringProperty;
+import org.carracoo.beans.lang.ValueOptions;
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,4 +1,4 @@
-package org.carracoo.beans.stl;
+package org.carracoo.beans.lang;
 
 import org.carracoo.beans.AbstractOptions;
 

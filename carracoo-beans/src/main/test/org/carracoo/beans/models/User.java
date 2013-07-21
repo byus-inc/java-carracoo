@@ -2,7 +2,7 @@ package org.carracoo.beans.models;
 
 import org.carracoo.beans.Bean;
 import org.carracoo.beans.View;
-import org.carracoo.beans.stl.*;
+import org.carracoo.beans.lang.*;
 
 /**
  * Created with IntelliJ IDEA.

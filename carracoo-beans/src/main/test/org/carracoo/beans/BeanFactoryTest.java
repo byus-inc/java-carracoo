@@ -1,12 +1,8 @@
 package org.carracoo.beans;
 
-import org.carracoo.beans.exceptions.BeanValidationException;
 import org.carracoo.beans.models.Comment;
 import org.carracoo.beans.models.Post;
 import org.carracoo.beans.models.User;
-import org.carracoo.beans.stl.EmailOptions;
-import org.carracoo.beans.stl.StringOptions;
-import org.carracoo.beans.stl.ValueProperty;
 import org.carracoo.utils.Printer;
 import org.junit.Test;
 

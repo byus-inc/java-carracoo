@@ -2,11 +2,9 @@ package org.carracoo.beans;
 
 
 import org.carracoo.beans.exceptions.BeanValidationException;
-import org.carracoo.beans.stl.ValueProperty;
+import org.carracoo.beans.lang.ValueProperty;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

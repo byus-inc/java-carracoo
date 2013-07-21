@@ -1,6 +1,6 @@
 package org.carracoo.beans;
 
-import org.carracoo.beans.stl.ValueProperty;
+import org.carracoo.beans.lang.ValueProperty;
 
 /**
  * Created with IntelliJ IDEA.

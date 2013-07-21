@@ -1,8 +1,7 @@
 package org.carracoo.beans.models.properties;
 
-import org.carracoo.beans.Bean;
 import org.carracoo.beans.models.Comment;
-import org.carracoo.beans.stl.ValueProperty;
+import org.carracoo.beans.lang.ValueProperty;
 
 /**
  * Created with IntelliJ IDEA.

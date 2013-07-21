@@ -1,9 +1,7 @@
-package org.carracoo.beans.stl;
+package org.carracoo.beans.lang;
 
 import org.carracoo.beans.AbstractProperty;
-import org.carracoo.beans.Bean;
 import org.carracoo.beans.exceptions.BeanValidationException;
-import org.carracoo.utils.StringUtils;
 
 import java.util.*;
 

@@ -1,6 +1,4 @@
-package org.carracoo.beans.stl;
-
-import org.carracoo.beans.Bean;
+package org.carracoo.beans.lang;
 
 /**
  * Created with IntelliJ IDEA.
