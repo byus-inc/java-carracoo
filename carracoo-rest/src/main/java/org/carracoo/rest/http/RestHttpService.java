@@ -35,7 +35,30 @@ public class RestHttpService implements RestService {
 			.action(getUrl(path))
 		;
 	}
-
+	public synchronized RestHttpRequest post(String path){
+		return new RestHttpRequest(this)
+			.method("POST")
+			.action(getUrl(path))
+		;
+	}
+	public synchronized RestHttpRequest put(String path){
+		return new RestHttpRequest(this)
+			.method("PUT")
+			.action(getUrl(path))
+		;
+	}
+	public synchronized RestHttpRequest delete(String path){
+		return new RestHttpRequest(this)
+			.method("DELETE")
+			.action(getUrl(path))
+		;
+	}
+	public synchronized RestHttpRequest head(String path){
+		return new RestHttpRequest(this)
+			.method("HEAD")
+			.action(getUrl(path))
+		;
+	}
 	private synchronized String getUrl(String path){
 		String url = path;
 		if(url!=null && !(url.startsWith("http") || url.startsWith("https"))){

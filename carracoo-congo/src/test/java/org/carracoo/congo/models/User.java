@@ -1,36 +1,36 @@
 package org.carracoo.congo.models;
 
-import org.carracoo.beans.Bean;
 import org.carracoo.beans.View;
-import org.carracoo.beans.stl.*;
+import org.carracoo.beans.lang.EmailProperty;
+import org.carracoo.beans.lang.StringProperty;
 
 /**
  * Created with IntelliJ IDEA.
- * User: Sergey
+ * UserModel: Sergey
  * Date: 7/19/13
  * Time: 9:06 PM
  * To change this template use File | Settings | File Templates.
  */
-public class User implements Bean,View.BeanEncoder,View.BeanDecoder {
+public class User implements View.BeanEncoder,View.BeanDecoder {
 
 	public final StringProperty id    = new StringProperty(){
-		class Id extends StringOptions {{
+		class Id extends Options {{
 				required = true;
 				unique   = true;
 		}}
 	};
 	public final StringProperty name  = new StringProperty(){
-		class Name extends StringOptions {{
+		class Name extends Options {{
 
 		}}
 	};
 	public final EmailProperty  email = new EmailProperty(){
-		class Email extends EmailOptions {{
+		class Email extends Options {{
 			required = true;
 		}}
 	};
 	public final StringProperty tags = new StringProperty(){
-		class Tags extends StringOptions {{
+		class Tags extends Options {{
 			multiple = true;
 			unique   = true;
 			ordered  = true;

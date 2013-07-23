@@ -21,6 +21,20 @@ public class ValueProperty<V> extends AbstractProperty<V> implements Iterable<V>
 		public Boolean unique       = false;
 		public Boolean ordered      = false;
 		public Class   container    = null;
+		public Class   container(){
+			if(container==null){
+				if(unique){
+					if(ordered){
+						container = TreeSet.class;
+					}else{
+						container = LinkedHashSet.class;
+					}
+				}else{
+					container = ArrayList.class;
+				}
+			}
+			return container;
+		}
 	}
 
 	protected Options options(){
@@ -35,7 +49,11 @@ public class ValueProperty<V> extends AbstractProperty<V> implements Iterable<V>
 			if(values==null){
 				return null;
 			}else{
-				return values.iterator().next();
+				if(values.size()>0){
+					return values.iterator().next();
+				}else{
+					return null;
+				}
 			}
 		}else{
 			return value;
@@ -102,18 +120,7 @@ public class ValueProperty<V> extends AbstractProperty<V> implements Iterable<V>
 
 	protected Collection<V> createContainer(){
 		try{
-			if(options().container==null){
-				if(options().unique){
-					if(options().ordered){
-						options().container = TreeSet.class;
-					}else{
-						options().container = LinkedHashSet.class;
-					}
-				}else{
-					options().container = ArrayList.class;
-				}
-			}
-			return (Collection<V>) options().container.newInstance();
+			return (Collection<V>) options().container().newInstance();
 		}catch (Exception ex){
 			if(options().unique){
 				if(options().ordered){

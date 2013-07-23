@@ -102,11 +102,15 @@ public class BeanMapperImpl implements BeanMapper {
 		if(target instanceof Iterable){
 			return encodeList(walker, target);
 		}else
+		if(target instanceof Number || target instanceof Boolean){
+			return target;
+		}else
 		if(factory.isBean(target.getClass())){
 			return encodeBean(walker, target);
 		}else{
-			return target;
+			return target.toString();
 		}
+
 	}
 
 
@@ -160,7 +164,7 @@ public class BeanMapperImpl implements BeanMapper {
 
 			walker.enter(key);
 			if(options.multiple){
-				Collection<Object> list   = (Collection<Object>)newInstance(options.container);
+				Collection<Object> list   = (Collection<Object>)newInstance(options.container());
 				if(options instanceof View.Values){
 					for(Object v : property){
 						walker.enter(list.size());

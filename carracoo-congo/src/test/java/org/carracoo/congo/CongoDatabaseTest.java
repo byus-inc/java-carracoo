@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
- * User: Sergey
+ * UserModel: Sergey
  * Date: 7/21/13
  * Time: 9:50 PM
  * To change this template use File | Settings | File Templates.

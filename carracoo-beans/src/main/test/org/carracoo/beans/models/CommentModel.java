@@ -1,18 +1,17 @@
 package org.carracoo.beans.models;
 
-import org.carracoo.beans.Bean;
 import org.carracoo.beans.lang.ValueProperty;
 import org.carracoo.beans.models.properties.UserProperty;
 import org.carracoo.beans.lang.StringProperty;
 
 /**
  * Created with IntelliJ IDEA.
- * User: Sergey
+ * UserModel: Sergey
  * Date: 7/19/13
  * Time: 9:06 PM
  * To change this template use File | Settings | File Templates.
  */
-public class Comment implements Bean {
+public class CommentModel {
 	
 	public final UserProperty author    = new UserProperty(){
 		class Author extends ValueProperty.Options {{

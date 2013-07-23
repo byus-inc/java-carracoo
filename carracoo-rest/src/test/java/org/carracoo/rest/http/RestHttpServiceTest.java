@@ -26,7 +26,7 @@ public class RestHttpServiceTest {
 	@Test
 	public void testRestHttpService() throws IOException, RestException {
 		RestHttpRequest request =
-			http.get("http://23.23.70.232:9200/yp/business/_search")
+			http.get("http://23.23.70.231:9200/yp/business/_search")
 				.param("pretty","true")
 				.header("X-Hello-World","herder")
 				.body("{'query':{'term':{'id':5589282}}}".replace('\'','"'))

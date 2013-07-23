@@ -18,5 +18,5 @@ public interface BeanFactory {
 	public BeanDefinition getDefinition (Class<?> type)  throws BeanException;
 	public ValueProperty getProperty(Object bean,String name) throws BeanException;
 	public Collection<ValueProperty> getProperties (Object bean) throws BeanException;
-	public void validateBean(Bean bean) throws BeanValidationException;
+	public void validateBean(Object bean) throws BeanValidationException;
 }

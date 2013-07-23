@@ -1,8 +1,8 @@
 package org.carracoo.beans;
 
-import org.carracoo.beans.models.Comment;
-import org.carracoo.beans.models.Post;
-import org.carracoo.beans.models.User;
+import org.carracoo.beans.models.CommentModel;
+import org.carracoo.beans.models.PostModel;
+import org.carracoo.beans.models.UserModel;
 import org.carracoo.utils.Printer;
 import org.testng.annotations.Test;
 
@@ -10,14 +10,14 @@ import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
- * User: Sergey
+ * UserModel: Sergey
  * Date: 7/19/13
  * Time: 9:05 PM
  * To change this template use File | Settings | File Templates.
  */
 public class BeanFactoryTest {
 
-	private final User sergey = new User(){{
+	private final UserModel sergey = new UserModel(){{
 		id.set("sergey");
 		name.set("Sergey Mamyan");
 		email.set("sergey.mamyan@gmail.com");
@@ -26,7 +26,7 @@ public class BeanFactoryTest {
 		tags.add("done");
 	}};
 
-	private final User aram = new User(){{
+	private final UserModel aram = new UserModel(){{
 		id.set("aram");
 		name.set("Aram Grigoryan");
 		email.set("aram.grigoryan@gmail.com");
@@ -34,7 +34,7 @@ public class BeanFactoryTest {
 		tags.add("done");
 	}};
 
-	private final User grish = new User(){{
+	private final UserModel grish = new UserModel(){{
 		id.set("grisha");
 		name.set("Grisha Gharibyan");
 		email.set("grishik@gmail.com");
@@ -42,20 +42,20 @@ public class BeanFactoryTest {
 		tags.add("done");
 	}};
 
-	private final Post post = new Post(){{
+	private final PostModel post = new PostModel(){{
 		id      .set("1");
-		title   .set("Cool Post Title");
+		title   .set("Cool PostModel Title");
 		owner   .set(aram);
 		comments.add(
-			new Comment(){{
+			new CommentModel(){{
 				author.set(sergey);
 				message.set("Hello All");
 			}},
-			new Comment(){{
+			new CommentModel(){{
 				author.set(aram);
 				message.set("Hello Sergey");
 			}},
-			new Comment(){{
+			new CommentModel(){{
 				author.set(grish);
 				message.set("Hello Guys");
 			}}
@@ -66,7 +66,7 @@ public class BeanFactoryTest {
 	public void testBeanFactory() throws BeanException {
 
 		Map  map = Beans.encode(Beans.walker("json"), post);
-		Post obj = Beans.decode(Beans.walker("json"), map, Post.class);
+		PostModel obj = Beans.decode(Beans.walker("json"), map, PostModel.class);
 
 		Printer.print( Beans.encode(Beans.walker("json"), obj));
 	}

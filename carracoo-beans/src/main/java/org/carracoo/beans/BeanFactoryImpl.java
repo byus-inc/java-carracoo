@@ -74,7 +74,7 @@ public class BeanFactoryImpl implements BeanFactory {
 	}
 
 	@Override
-	public void validateBean(Bean bean) throws BeanValidationException {
+	public void validateBean(Object bean) throws BeanValidationException {
 		Collection<ValueProperty> properties;
 		try {
 			properties = getProperties(bean);

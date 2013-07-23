@@ -58,15 +58,15 @@ public class Beans {
 	}
 
 
-	public static ValueProperty property(Bean bean, String name) throws BeanException {
+	public static ValueProperty property(Object bean, String name) throws BeanException {
 		return factory().getProperty(bean, name);
 	}
 
-	public static Collection<ValueProperty> properties(Bean bean) throws BeanException {
+	public static Collection<ValueProperty> properties(Object bean) throws BeanException {
 		return factory().getProperties(bean);
 	}
 
-	public static void validate(Bean bean) throws BeanValidationException {
+	public static void validate(Object bean) throws BeanValidationException {
 		factory().validateBean(bean);
 	}
 

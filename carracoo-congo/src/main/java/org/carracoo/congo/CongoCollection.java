@@ -3,7 +3,7 @@ package org.carracoo.congo;
 import com.mongodb.DBCollection;
 import org.carracoo.beans.BeanDefinition;
 import org.carracoo.beans.BeanException;
-import org.carracoo.beans.stl.ValueProperty;
+import org.carracoo.beans.lang.ValueProperty;
 import org.carracoo.utils.StringUtils;
 
 /**
