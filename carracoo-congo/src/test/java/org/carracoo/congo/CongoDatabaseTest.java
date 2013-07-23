@@ -23,7 +23,7 @@ public class CongoDatabaseTest {
 	@Test
 	public void testDatabase() throws BeanMappingException {
 		CongoDatabase database = new CongoDatabase(
-			"mongodb://local.byus.com:27017/test",
+			"mongodb://admin:admin@flame.mongohq.com:27074/test-sm",
 			Beans.mapper(),
 			Beans.walker("bson:mongo")
 		);
