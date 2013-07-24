@@ -51,7 +51,11 @@ public class CongoResult<T> implements Iterable<T>{
 	}
 
 	public T first(){
-		T next = iterator().next();
+		Iterator<T> iterator = iterator();
+		if (!iterator.hasNext()) {
+			return null;
+		}
+		T next = iterator.next();
 		close();
 		return next;
 	}

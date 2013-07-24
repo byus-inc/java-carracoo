@@ -3,6 +3,7 @@ package org.carracoo.congo;
 import com.mongodb.DBCollection;
 import org.carracoo.beans.BeanDefinition;
 import org.carracoo.beans.BeanException;
+import org.carracoo.beans.lang.IdentifierProperty;
 import org.carracoo.beans.lang.ValueProperty;
 import org.carracoo.beans.utils.Query;
 import org.carracoo.utils.StringUtils;
@@ -58,14 +59,19 @@ public class CongoCollection <T>{
 	}
 
 	public void save(T model){
-		if(definition!=null){
-			ValueProperty property = definition.getProperty("id");
-			if(property.options instanceof CongoId){
-				((CongoId)property.options).generate(property);
+		try {
+			if(definition!=null){
+				ValueProperty property = definition.getProperty("id");
+				if(property instanceof IdentifierProperty){
+					property = database().mapper().getFactory().getProperty(model, "id");
+					((IdentifierProperty)property).generate();
+				}
+				mongo().save(new CongoObject(model,definition));
+			}else{
+				mongo().save(new CongoObject(model));
 			}
-			mongo().save(new CongoObject(model,definition));
-		}else{
-			mongo().save(new CongoObject(model));
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 

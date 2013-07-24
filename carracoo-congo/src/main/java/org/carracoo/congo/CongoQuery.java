@@ -2,12 +2,10 @@ package org.carracoo.congo;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import org.carracoo.json.JSON;
 import org.carracoo.beans.utils.Query;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -23,7 +21,7 @@ public class CongoQuery {
 	private static final Pattern PATTERN = Pattern.compile(TOKEN);
 
 	public static DBObject create(String json, Object... args){
-		return new BasicDBObject(Query.get(json, args).getAsMap());
+		return new BasicDBObject(Query.get(json, args).asMap());
 	}
 
 	public static DBObject create(Query query){
@@ -31,7 +29,7 @@ public class CongoQuery {
 		if (query.equals(Query.NONE)) {
 			map = new HashMap();
 		} else {
-			map = query.getAsMap();
+			map = query.asMap();
 		}
 		return new BasicDBObject(map);
 	}

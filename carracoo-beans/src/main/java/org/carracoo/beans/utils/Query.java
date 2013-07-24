@@ -21,14 +21,11 @@ public class Query {
 	public static final Query NONE = new Query(null);
 
 	public static Query get(Object query, Object... params) {
-		if (params == null) {
-			params = new Object[]{null};
-		}
 		return new Query(query, params);
 	}
 
-	private Object value;
-	private Object[] params;
+	private final Object value;
+	private final Object[] params;
 
 	private Query(Object value, Object... params) {
 		this.value = value;
@@ -43,18 +40,37 @@ public class Query {
 		return params;
 	}
 
-	public String getAsString() {
+	public String asString() {
 		if (value == null) {
 			return null;
 		}
 		return createStringQueryWithParameters(getStringValue(), params);
 	}
 
-	public Map getAsMap() {
+	public String asString(Object... params) {
+		return createStringQueryWithParameters(getStringValue(), params);
+	}
+
+	public Map asMap() {
 		if (value == null) {
 			return null;
 		}
+		if (value instanceof Map && (params == null || params.length == 0)) {
+			return (Map)value;
+		}
 		return createMapQueryWithParameters(getStringValue(), params);
+	}
+
+	public Map asMap(Object... params) {
+		return createMapQueryWithParameters(getStringValue(), params);
+	}
+
+	public Query clone() {
+		return new Query(value, params);
+	}
+
+	public Query clone(Object... params) {
+		return new Query(value, params);
 	}
 
 	private String getStringValue() {
