@@ -1,6 +1,7 @@
 package org.carracoo.congo;
 
 import com.mongodb.DBCursor;
+import org.carracoo.beans.utils.Query;
 
 import java.util.Iterator;
 
@@ -54,11 +55,17 @@ public class CongoResult<T> implements Iterable<T>{
 		close();
 		return next;
 	}
+
 	public CongoResult<T> limit(int limit){
-		cursor.limit(limit);return this;
+		cursor.limit(limit); return this;
 	}
-	public CongoResult<T> sort(String string,Object... args){
-		cursor.sort(CongoQuery.create(string,args));return this;
+
+	public CongoResult<T> sort(String string, Object... args){
+		sort(Query.get(string, args)); return this;
+	}
+
+	public CongoResult<T> sort(Query query){
+		cursor.sort(CongoQuery.create(query));return this;
 	}
 
 	public CongoResult<T> skip(int limit){

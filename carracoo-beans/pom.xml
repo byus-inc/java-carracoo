@@ -15,5 +15,10 @@
 			<groupId>org.carracoo</groupId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<artifactId>carracoo-json</artifactId>
+			<groupId>org.carracoo</groupId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

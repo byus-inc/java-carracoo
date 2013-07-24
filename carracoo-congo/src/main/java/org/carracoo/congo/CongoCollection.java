@@ -4,6 +4,7 @@ import com.mongodb.DBCollection;
 import org.carracoo.beans.BeanDefinition;
 import org.carracoo.beans.BeanException;
 import org.carracoo.beans.lang.ValueProperty;
+import org.carracoo.beans.utils.Query;
 import org.carracoo.utils.StringUtils;
 
 /**
@@ -73,26 +74,47 @@ public class CongoCollection <T>{
 	}
 
 	public void remove(String query, Object... args){
-		mongo().remove(CongoQuery.create(query, args));
+		remove(Query.get(query, args));
+	}
+
+	public void remove(Query query){
+		mongo().remove(CongoQuery.create(query));
 	}
 
 	public T get(String query, Object... args){
-		return find(query, args).skip(0).limit(1).first();
+		return get(Query.get(query, args));
+	}
+
+	public T get(Query query){
+		return find(query).skip(0).limit(1).first();
 	}
 
 	public long count(){
 		return count("{}");
 	}
+
 	public long count(String query, Object... args){
-		return mongo().count(CongoQuery.create(query, args));
+		return count(Query.get(query, args));
+	}
+
+	public long count(Query query){
+		return mongo().count(CongoQuery.create(query));
 	}
 
 	public CongoResult<T> find(String query, Object... args){
-		return new CongoResult<T>(mongo().find(CongoQuery.create(query, args)));
+		return find(Query.get(query, args));
+	}
+
+	public CongoResult<T> find(Query query){
+		return new CongoResult<T>(mongo().find(CongoQuery.create(query)));
 	}
 
 	public CongoResult<T> findOnly(String query, String keys, Object... args){
-		return new CongoResult<T>(mongo().find(CongoQuery.create(query, args), CongoQuery.create(keys)));
+		return findOnly(Query.get(query, args), keys);
+	}
+
+	public CongoResult<T> findOnly(Query query, String keys){
+		return new CongoResult<T>(mongo().find(CongoQuery.create(query), CongoQuery.create(keys)));
 	}
 
 }
