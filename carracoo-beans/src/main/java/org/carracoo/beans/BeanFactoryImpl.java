@@ -65,6 +65,9 @@ public class BeanFactoryImpl implements BeanFactory {
 
 	@Override
 	public Boolean isBean(Class<?> type)  {
+		if (type == null) {
+			return false;
+		}
 		if(!beans.containsKey(type)){
 			try {
 				getDefinition(type);

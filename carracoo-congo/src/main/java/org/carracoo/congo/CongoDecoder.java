@@ -3,6 +3,7 @@ package org.carracoo.congo;
 import com.mongodb.*;
 import org.bson.BSONCallback;
 import org.bson.BSONObject;
+import org.carracoo.beans.BeanDefinition;
 import org.carracoo.beans.BeanException;
 import org.carracoo.beans.BeanMapper;
 import org.carracoo.beans.Walker;
@@ -39,10 +40,16 @@ public class CongoDecoder implements DBDecoder {
 	@Override
 	public DBObject decode(byte[] b, DBCollection collection) {
 		try {
-			return new CongoObject(
-				mapper.decode(walker,BSON.decode(b),model),
-				mapper.getFactory().getDefinition(model)
-			);
+			if (model == null) {
+				return new CongoObject(
+					mapper.decode(walker, BSON.decode(b), null)
+				);
+			} else {
+				return new CongoObject(
+					mapper.decode(walker, BSON.decode(b), model),
+					mapper.getFactory().getDefinition(model)
+				);
+			}
 		}catch (BeanException e){
 			throw new RuntimeException(e);
 		}
