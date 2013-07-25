@@ -78,7 +78,9 @@ public class BeanValidatorImpl implements BeanValidator {
 							view.exit();
 						}
 					}else{
-						validateBean(errors,view,property.get());
+						if (property.get() != null) {
+							validateBean(errors,view,property.get());
+						}
 					}
 				}else{
 					if(property.options.multiple){
