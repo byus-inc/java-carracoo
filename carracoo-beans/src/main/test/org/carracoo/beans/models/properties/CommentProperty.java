@@ -1,7 +1,7 @@
 package org.carracoo.beans.models.properties;
 
+import org.carracoo.beans.Property;
 import org.carracoo.beans.models.CommentModel;
-import org.carracoo.beans.lang.ValueProperty;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,6 +10,6 @@ import org.carracoo.beans.lang.ValueProperty;
  * Time: 4:48 AM
  * To change this template use File | Settings | File Templates.
  */
-public class CommentProperty extends ValueProperty<CommentModel> {
+public class CommentProperty extends Property<CommentModel> {
 
 }

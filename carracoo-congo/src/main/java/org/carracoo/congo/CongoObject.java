@@ -2,8 +2,8 @@ package org.carracoo.congo;
 
 import com.mongodb.DBObject;
 import org.bson.BSONObject;
-import org.carracoo.beans.BeanDefinition;
-import org.carracoo.beans.BeanException;
+import org.carracoo.beans.Definition;
+import org.carracoo.beans.exceptions.BeanException;
 
 import java.util.Map;
 import java.util.Set;
@@ -19,7 +19,7 @@ public class CongoObject implements DBObject {
 
 	private final Object         bean;
 	private final Map            map;
-	private final BeanDefinition definition;
+	private final Definition definition;
 
 
 	public final Object target(){
@@ -30,7 +30,7 @@ public class CongoObject implements DBObject {
 		}
 	}
 
-	public CongoObject(Object bean, BeanDefinition definition){
+	public CongoObject(Object bean, Definition definition){
 		if(definition.getType().isAssignableFrom(bean.getClass())){
 			this.bean        = bean;
 			this.definition  = definition;

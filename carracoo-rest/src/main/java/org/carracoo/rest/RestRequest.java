@@ -125,12 +125,10 @@ abstract public class RestRequest {
 			sb.append(headers());
 		}
 		if(body()!=null){
-			if(headers().size()==0){
-				sb.append("\n");
-			}
-			sb.append(body());
 			sb.append("\n");
+			sb.append(body());
 		}
+		sb.append("\n");
 		return sb.toString();
 	}
 }

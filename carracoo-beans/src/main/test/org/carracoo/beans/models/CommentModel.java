@@ -1,6 +1,6 @@
 package org.carracoo.beans.models;
 
-import org.carracoo.beans.lang.ValueProperty;
+import org.carracoo.beans.Property;
 import org.carracoo.beans.models.properties.UserProperty;
 import org.carracoo.beans.lang.StringProperty;
 
@@ -14,7 +14,7 @@ import org.carracoo.beans.lang.StringProperty;
 public class CommentModel {
 	
 	public final UserProperty author    = new UserProperty(){
-		class Author extends ValueProperty.Options {{
+		class Author extends Property.Options {{
 			required = true;
 		}}
 	};

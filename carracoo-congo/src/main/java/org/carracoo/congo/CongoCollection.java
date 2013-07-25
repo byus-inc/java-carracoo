@@ -1,10 +1,10 @@
 package org.carracoo.congo;
 
 import com.mongodb.DBCollection;
-import org.carracoo.beans.BeanDefinition;
-import org.carracoo.beans.BeanException;
+import org.carracoo.beans.Definition;
+import org.carracoo.beans.exceptions.BeanException;
 import org.carracoo.beans.lang.IdentifierProperty;
-import org.carracoo.beans.lang.ValueProperty;
+import org.carracoo.beans.Property;
 import org.carracoo.beans.utils.Query;
 import org.carracoo.utils.StringUtils;
 
@@ -16,8 +16,8 @@ import org.carracoo.utils.StringUtils;
  * To change this template use File | Settings | File Templates.
  */
 public class CongoCollection <T>{
-	private final BeanDefinition definition;
-	public CongoCollection(CongoDatabase database, Class<T> model){
+	private final Definition definition;
+	public CongoCollection(CongoDatabase database, Class<T> model) throws BeanException {
 		this.database   = database;
 		this.model      = model;
 
@@ -25,22 +25,12 @@ public class CongoCollection <T>{
 			StringUtils.toUnderscoredNotation(model.getSimpleName())
 		);
 		this.mongo.setDBDecoderFactory(new CongoDecoder.Factory(
-			database.mapper(), database.walker(), model
+			database.beans().getDecoder(database.walker()), model
 		));
         this.mongo.setDBEncoderFactory(new CongoEncoder.Factory(
-            database.mapper(), database.walker()
+            database.beans().getEncoder(database.walker())
         ));
-        BeanDefinition definition;
-		try {
-			definition = database()
-				.mapper()
-				.getFactory()
-				.getDefinition(model)
-			;
-		}catch (BeanException ex){
-			definition =null;
-		}
-		this.definition = definition;
+		this.definition = database().beans().getDefinition(model);
 	}
 
 	private final CongoDatabase database;
@@ -61,9 +51,9 @@ public class CongoCollection <T>{
 	public void save(T model){
 		try {
 			if(definition!=null){
-				ValueProperty property = definition.getProperty("id");
+				Property property = definition.getProperty("id");
 				if(property instanceof IdentifierProperty){
-					property = database().mapper().getFactory().getProperty(model, "id");
+					property = database().beans().getProperty(model, "id");
 					((IdentifierProperty)property).generate();
 				}
 				mongo().save(new CongoObject(model,definition));

@@ -1,4 +1,6 @@
-package org.carracoo.beans;
+package org.carracoo.beans.core;
+
+import org.carracoo.beans.Walker;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -11,7 +13,7 @@ import java.util.Stack;
  * Time: 9:59 PM
  * To change this template use File | Settings | File Templates.
  */
-public class BeanView implements Walker {
+public class WalkerImpl implements Walker {
 
 	public static class Path extends Stack<String> {
 		@Override
@@ -24,11 +26,15 @@ public class BeanView implements Walker {
 		}
 	}
 
-	public BeanView(String name){
+	public WalkerImpl(){
+		this("default:Default");
+	}
+
+	public WalkerImpl(String name){
 		this(name,new Path());
 	}
 
-	public BeanView(String url, Path path){
+	public WalkerImpl(String url, Path path){
 
 		String[] parts = url.split("\\?");
 		String base,params;
@@ -42,11 +48,11 @@ public class BeanView implements Walker {
 
 		String[] baseParts = base.split(":");
 		if(baseParts.length>1){
-			this.format = baseParts[0];
-			this.target = baseParts[1];
+			this.target = baseParts[0];
+			this.format = baseParts[1];
 		}else{
-			this.format = baseParts[0];
-			this.target = "default";
+			this.target = baseParts[0];
+			this.format = "default";
 		}
 
 		if(params!=null){
@@ -153,13 +159,13 @@ public class BeanView implements Walker {
 	}
 
 	public Walker clone(){
-		BeanView v;
+		WalkerImpl v;
 		if(this.params!=null){
-			v = new BeanView(base()+"?%clone=TRUE");
+			v = new WalkerImpl(base()+"?%clone=TRUE");
 			v.params.putAll(this.params);
 			v.params.remove("%clone");
 		}else{
-			v = new BeanView(base());
+			v = new WalkerImpl(base());
 		}
 		return v;
 	}

@@ -1,10 +1,5 @@
 package org.carracoo.beans.models;
 
-import org.carracoo.beans.View;
-import org.carracoo.beans.lang.EmailProperty;
-import org.carracoo.beans.lang.StringProperty;
-import org.carracoo.beans.lang.ValueProperty;
-
 import java.util.List;
 
 /**

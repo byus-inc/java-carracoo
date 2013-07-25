@@ -72,6 +72,7 @@ public class RestResponse {
 		ANSI.append(sb, status.code+" "+status.message, status.success ? ANSI.Color.GREEN:ANSI.Color.RED);
 		sb.append("\n");
 		sb.append(headers);
+		sb.append("\n");
 		sb.append(body);
 		sb.append("\n");
 		ANSI.append(sb, "END", ANSI.Color.CYAN);

@@ -1,7 +1,7 @@
 package org.carracoo.beans.models.properties;
 
 import org.carracoo.beans.models.UserModel;
-import org.carracoo.beans.lang.ValueProperty;
+import org.carracoo.beans.Property;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,7 +10,7 @@ import org.carracoo.beans.lang.ValueProperty;
  * Time: 4:48 AM
  * To change this template use File | Settings | File Templates.
  */
-public class UserProperty extends ValueProperty<UserModel> {
+public class UserProperty extends Property<UserModel> {
 
 
 }

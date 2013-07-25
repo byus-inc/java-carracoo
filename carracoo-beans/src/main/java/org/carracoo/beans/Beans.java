@@ -1,8 +1,12 @@
 package org.carracoo.beans;
 
 
+import org.carracoo.beans.core.BeanServiceImpl;
+import org.carracoo.beans.core.WalkerImpl;
+import org.carracoo.beans.exceptions.BeanDecodingException;
+import org.carracoo.beans.exceptions.BeanEncodingException;
+import org.carracoo.beans.exceptions.BeanException;
 import org.carracoo.beans.exceptions.BeanValidationException;
-import org.carracoo.beans.lang.ValueProperty;
 
 import java.util.*;
 
@@ -15,11 +19,10 @@ import java.util.*;
  */
 public class Beans {
 
-	public static Class<? extends BeanFactory> FACTORY_CLASS = BeanFactoryImpl.class;
-	public static Class<? extends BeanMapper>  MAPPER_CLASS  = BeanMapperImpl.class;
+	public static Class<? extends BeanService> FACTORY_CLASS = BeanServiceImpl.class;
 
-	private static BeanFactory factory;
-	public  static BeanFactory factory(){
+	private static BeanService factory;
+	public  static BeanService factory(){
 		if(factory==null || !FACTORY_CLASS.equals(factory.getClass())){
 			try {
 				factory = FACTORY_CLASS.newInstance();
@@ -32,53 +35,44 @@ public class Beans {
 		return factory;
 	}
 
-	public static BeanMapper mapper(){
-		BeanMapper mapper = null;
-		try {
-			mapper = MAPPER_CLASS.newInstance();
-			mapper.setFactory(factory());
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
-		return mapper;
-	}
-
 	public static Boolean isBean(Class<?> type){
 		return factory().isBean(type);
 	}
 
 	public static  <T> T get(Class<T> type) throws BeanException {
-		return factory().getInstance(type);
+		return factory().newBean(type);
 	}
 
-	public static BeanDefinition definition(Class<?> type) throws BeanException {
+	public static Definition definition(Class<?> type) throws BeanException {
 		return factory().getDefinition(type);
 	}
 
 
-	public static ValueProperty property(Object bean, String name) throws BeanException {
+	public static Property property(Object bean, String name) throws BeanException {
 		return factory().getProperty(bean, name);
 	}
 
-	public static Collection<ValueProperty> properties(Object bean) throws BeanException {
+	public static Collection<Property> properties(Object bean) throws BeanException {
 		return factory().getProperties(bean);
 	}
 
-	public static void validate(Object bean) throws BeanValidationException {
-		factory().validateBean(bean);
+	public static void validate(Object bean) throws BeanValidationException, BeanException {
+		factory().getValidator().validate(bean);
+	}
+
+	public static void validate(Walker view, Object bean) throws BeanValidationException, BeanException {
+		factory().getValidator(view).validate(bean);
 	}
 
 	public static Walker walker(String string) {
-		return new BeanView(string);
+		return new WalkerImpl(string);
 	}
 
-	public static <T> T encode(Walker view, Object target) throws BeanMappingException {
-		return mapper().encode(view,target);
+	public static <T> T encode(Walker view, Object target) throws BeanException, BeanEncodingException {
+		return factory().getEncoder(view).encode(view,target);
 	}
 
-	public static <T> T decode(Walker view, Object target, Class<T> type)  throws BeanMappingException {
-		return mapper().decode(view, target, type);
+	public static <T> T decode(Walker view, Object target, Class<T> type) throws BeanException, BeanDecodingException {
+		return factory().getDecoder(view).decode(target, type);
 	}
 }

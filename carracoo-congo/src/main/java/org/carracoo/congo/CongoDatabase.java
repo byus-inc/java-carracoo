@@ -1,8 +1,9 @@
 package org.carracoo.congo;
 
 import com.mongodb.*;
-import org.carracoo.beans.BeanMapper;
+import org.carracoo.beans.BeanService;
 import org.carracoo.beans.Walker;
+import org.carracoo.beans.exceptions.BeanException;
 
 import java.net.UnknownHostException;
 
@@ -30,34 +31,40 @@ public class CongoDatabase {
 	}
 
 	final
-	private BeanMapper mapper;
-	public  BeanMapper mapper(){
-		return mapper;
+	private BeanService beans;
+	public  BeanService beans(){
+		return beans;
 	}
 
-	public CongoDatabase(BeanMapper mapper, Walker walker){
-		this(URL,mapper,walker);
+	public CongoDatabase(BeanService beans, Walker walker){
+		this(URL, beans,walker);
 	}
 
-	public CongoDatabase(String url, BeanMapper mapper, Walker walker){
-		this.walker = walker;
-		this.mapper = mapper;
+	public CongoDatabase(String url, BeanService beans, Walker walker){
+		this.walker  = walker;
+		this.beans = beans;
 		DB database = null;
 		try {
 			MongoClientURI uri = new MongoClientURI(url);
 			MongoClient client = new MongoClient(uri);
 			database = client.getDB(uri.getDatabase());
-			DefaultDBEncoder.FACTORY = new CongoEncoder.Factory(mapper,walker);
-			DefaultDBDecoder.FACTORY = new CongoDecoder.Factory(mapper,walker,null);
+			DefaultDBEncoder.FACTORY = new CongoEncoder.Factory(beans.getEncoder(walker));
+			DefaultDBDecoder.FACTORY = new CongoDecoder.Factory(beans.getDecoder(walker),null);
 		} catch (UnknownHostException e) {
 			throw new RuntimeException("Unknown Host <"+url+">",e);
-		}finally {
+		} catch (BeanException e) {
+			throw new RuntimeException("Bean serviced initialization problem",e);
+		} finally {
 			this.mongo = database;
 		}
 	}
 
 	public <T> CongoCollection<T> collection(Class<T> cls){
-		return new CongoCollection<T>(this,cls);
+		try{
+			return new CongoCollection<T>(this,cls);
+		}catch (BeanException e) {
+			throw new RuntimeException("Probably invalid bean class",e);
+		}
 	}
 
 }

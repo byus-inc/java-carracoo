@@ -1,7 +1,9 @@
 package org.carracoo.beans.lang;
 
-public abstract class IdentifierProperty<V> extends ValueProperty<V> {
-	public static class Options extends ValueProperty.Options {
+import org.carracoo.beans.Property;
+
+public abstract class IdentifierProperty<V> extends Property<V> {
+	public static class Options extends Property.Options {
 	}
 
 	abstract public void generate();

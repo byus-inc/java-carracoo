@@ -1,10 +1,13 @@
-package org.carracoo.beans.lang;
+package org.carracoo.beans;
 
-import org.carracoo.beans.AbstractOptions;
-import org.carracoo.beans.AbstractProperty;
 import org.carracoo.beans.exceptions.BeanValidationException;
+import org.carracoo.utils.ReflectUtils;
+import org.carracoo.utils.StringUtils;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,9 +16,16 @@ import java.util.*;
  * Time: 6:36 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ValueProperty<V> extends AbstractProperty<V> implements Iterable<V> {
+public class Property<V> implements Iterable<V> {
 
-	public static class Options extends AbstractOptions {
+	private static final Map<Class,Options> optionsCache = new ConcurrentHashMap<Class,Options>();
+	public  static class Options {
+		//General Options
+		public Object  parent       = null;
+		public String  name         = null;
+		public Class   type         = null;
+		public Field   field        = null;
+		//Value Options
 		public Boolean multiple     = false;
 		public Boolean required     = false;
 		public Boolean unique       = false;
@@ -37,15 +47,41 @@ public class ValueProperty<V> extends AbstractProperty<V> implements Iterable<V>
 		}
 	}
 
-	protected Options options(){
-		return (Options) options;
+	public Property() {
+		Options options = null;
+		try {
+			if(!optionsCache.containsKey(this.getClass())){
+				Constructor<?> constructor = this.getClass().getDeclaredClasses()[0].getDeclaredConstructor(this.getClass());
+				constructor.setAccessible(true);
+				options = (Options) constructor.newInstance(this);
+				if(options.name==null){
+					options.name = StringUtils.toUnderscoredNotation(options.getClass().getSimpleName());
+				}
+				if(options.type==null){
+					options.type = ReflectUtils.getTypeArguments(
+						Property.class, this.getClass()
+					).get(0);
+				}
+				optionsCache.put(this.getClass(), options);
+			}else{
+				options = optionsCache.get(this.getClass());
+			}
+		}catch (Exception ex){
+			ex.printStackTrace();
+		}
+		this.options = options;
 	}
+
+
+
+	final public Options options;
+
 
 	protected V value;
 	protected Collection<V> values;
 
 	public V get(){
-		if(options().multiple){
+		if(options.multiple){
 			if(values==null){
 				return null;
 			}else{
@@ -62,7 +98,7 @@ public class ValueProperty<V> extends AbstractProperty<V> implements Iterable<V>
 
 
 	public void set(V value){
-		if(options().multiple){
+		if(options.multiple){
 			setMulti(value);
 		}else{
 			setSingle(value);
@@ -96,7 +132,7 @@ public class ValueProperty<V> extends AbstractProperty<V> implements Iterable<V>
 	}
 
 	public boolean empty(){
-		if(options().multiple){
+		if(options.multiple){
 			return values==null || values.size()==0;
 		}else {
 			return null == value;
@@ -120,10 +156,10 @@ public class ValueProperty<V> extends AbstractProperty<V> implements Iterable<V>
 
 	protected Collection<V> createContainer(){
 		try{
-			return (Collection<V>) options().container().newInstance();
+			return (Collection<V>) options.container().newInstance();
 		}catch (Exception ex){
-			if(options().unique){
-				if(options().ordered){
+			if(options.unique){
+				if(options.ordered){
 					return new TreeSet<V>();
 				}else{
 					return new LinkedHashSet<V>();
@@ -136,7 +172,7 @@ public class ValueProperty<V> extends AbstractProperty<V> implements Iterable<V>
 
 	@Override
 	public Iterator<V> iterator() {
-		if(options().multiple){
+		if(options.multiple){
 			if(values==null){
 				values = createContainer();
 			}
@@ -146,11 +182,16 @@ public class ValueProperty<V> extends AbstractProperty<V> implements Iterable<V>
 		}
 	}
 
-	public void validate() throws BeanValidationException {
-		if (options().required && empty()){
-			throw new BeanValidationException(
+	public void validate(View view) throws BeanValidationException {
+		if (options.required && empty()){
+			throw new BeanValidationException(view,
+				"PROPERTY_REQUIRED",
 				String.format("property %s is required",options.name)
 			);
 		}
+	}
+
+	public void validate(View view, Object item) throws BeanValidationException {
+
 	}
 }

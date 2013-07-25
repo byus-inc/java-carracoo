@@ -3,9 +3,9 @@ package org.carracoo.congo;
 import com.mongodb.*;
 import org.bson.BSONCallback;
 import org.bson.BSONObject;
-import org.carracoo.beans.BeanDefinition;
-import org.carracoo.beans.BeanException;
-import org.carracoo.beans.BeanMapper;
+import org.carracoo.beans.BeanDecoder;
+import org.carracoo.beans.exceptions.BeanDecodingException;
+import org.carracoo.beans.exceptions.BeanException;
 import org.carracoo.beans.Walker;
 import org.carracoo.bson.BSON;
 import org.carracoo.utils.IO;
@@ -22,13 +22,11 @@ import java.io.InputStream;
  */
 public class CongoDecoder implements DBDecoder {
 
-	private final BeanMapper mapper;
-	private final Walker walker;
+	private final BeanDecoder mapper;
 	private final Class<?> model;
 
-	public CongoDecoder(BeanMapper mapper, Walker walker, Class<?> model){
+	public CongoDecoder(BeanDecoder mapper, Class<?> model){
 		this.mapper = mapper;
-		this.walker = walker;
 		this.model  = model;
 	}
 
@@ -42,16 +40,18 @@ public class CongoDecoder implements DBDecoder {
 		try {
 			if (model == null) {
 				return new CongoObject(
-					mapper.decode(walker, BSON.decode(b), null)
+					mapper.decode(BSON.decode(b), null)
 				);
 			} else {
 				return new CongoObject(
-					mapper.decode(walker, BSON.decode(b), model),
-					mapper.getFactory().getDefinition(model)
+					mapper.decode(BSON.decode(b), model),
+					mapper.getService().getDefinition(model)
 				);
 			}
 		}catch (BeanException e){
-			throw new RuntimeException(e);
+			throw new RuntimeException("Bean decoding problem",e);
+		} catch (BeanDecodingException e) {
+			throw new RuntimeException("Bean decoding problem",e);
 		}
 	}
 
@@ -89,19 +89,17 @@ public class CongoDecoder implements DBDecoder {
 	 */
 	public static class Factory implements DBDecoderFactory {
 
-		private final BeanMapper mapper;
-		private final Walker walker;
+		private final BeanDecoder mapper;
 		private final Class<?> model;
 
-		public Factory(BeanMapper mapper, Walker walker, Class<?> model){
+		public Factory(BeanDecoder mapper, Class<?> model){
 			this.mapper = mapper;
-			this.walker = walker;
 			this.model  = model;
 		}
 
 		@Override
 		public DBDecoder create() {
-			return new CongoDecoder(mapper,walker,model);
+			return new CongoDecoder(mapper,model);
 		}
 	}
 }

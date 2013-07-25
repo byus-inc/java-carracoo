@@ -125,17 +125,13 @@ public class JsonEncoder {
 		if(info.isMap()){
 			encodeObject(out,level,value);
 		}else
-		if(info.isSimple()){
-			if(
-				value instanceof Number  ||
-				value instanceof Boolean
-			){
-				out.append(value.toString());
-			}else{
-				out.append(escape(value.toString()));
-			}
+		if(
+			value instanceof Number  ||
+			value instanceof Boolean
+		){
+			out.append(value.toString());
 		}else{
-			throw new RuntimeException("Invalid Structure");
+			out.append(escape(value.toString()));
 		}
 	}
 

@@ -1,5 +1,6 @@
 package org.carracoo.beans.models;
 
+import org.carracoo.beans.Property;
 import org.carracoo.beans.View;
 import org.carracoo.beans.lang.*;
 
@@ -20,26 +21,29 @@ public class UserModel implements View.BeanEncoder,View.BeanDecoder {
 			}
 
 			@Override
-			public String key(View view, ValueProperty property) {
+			public String key(View view, Property property) {
 				return name;
 			}
 
 			@Override
-			public Object get(View view, ValueProperty property) {
+			public Object get(View view, Property property) {
 				return view.path();
 			}
 		}
 	};
+
 	public final StringProperty name  = new StringProperty(){
 		class Name extends Options {{
-
+			required = true;
 		}}
 	};
+
 	public final EmailProperty  email = new EmailProperty(){
 		class Email extends Options {{
 			required = true;
 		}}
 	};
+
 	public final StringProperty tags = new StringProperty(){
 		class Tags extends Options implements View.Values{
 			public Tags() {
@@ -47,9 +51,8 @@ public class UserModel implements View.BeanEncoder,View.BeanDecoder {
 				unique   = true;
 				ordered  = true;
 			}
-
 			@Override
-			public Object get(View view, ValueProperty property, Object item) {
+			public Object get(View view, Property property, Object item) {
 				return "TAG "+item;
 			}
 		}

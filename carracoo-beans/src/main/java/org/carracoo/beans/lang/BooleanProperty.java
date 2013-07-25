@@ -1,6 +1,8 @@
 package org.carracoo.beans.lang;
 
-public class BooleanProperty extends ValueProperty<Boolean> {
-	public static class Options extends ValueProperty.Options {
+import org.carracoo.beans.Property;
+
+public class BooleanProperty extends Property<Boolean> {
+	public static class Options extends Property.Options {
 	}
 }

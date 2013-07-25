@@ -1,4 +1,4 @@
-package org.carracoo.beans;
+package org.carracoo.beans.exceptions;
 
 /**
  * Created with IntelliJ IDEA.

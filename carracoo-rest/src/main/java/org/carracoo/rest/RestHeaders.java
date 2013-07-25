@@ -40,7 +40,7 @@ public class RestHeaders extends LinkedHashMap<String,Object> {
 					sb.append("\n");
 				}
 			}
-			str = sb.toString();
+			str = sb.substring(0,sb.length()-1).toString();
 		}
 		return str;
 	}

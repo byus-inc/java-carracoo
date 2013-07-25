@@ -1,12 +1,10 @@
 package org.carracoo.congo;
 
-import org.carracoo.beans.BeanMapper;
-import org.carracoo.beans.BeanMappingException;
+import org.carracoo.beans.exceptions.BeanDecodingException;
 import org.carracoo.beans.Beans;
-import org.carracoo.bson.BSON;
+import org.carracoo.beans.exceptions.BeanEncodingException;
+import org.carracoo.beans.exceptions.BeanException;
 import org.carracoo.congo.models.User;
-import org.carracoo.json.JSON;
-import org.carracoo.utils.ByteUtils;
 import org.carracoo.utils.Printer;
 import org.testng.annotations.Test;
 
@@ -21,10 +19,10 @@ import java.util.Map;
  */
 public class CongoDatabaseTest {
 	@Test
-	public void testDatabase() throws BeanMappingException {
+	public void testDatabase() throws BeanDecodingException, BeanEncodingException, BeanException {
 		CongoDatabase database = new CongoDatabase(
 			"mongodb://admin:admin@flame.mongohq.com:27074/test-sm",
-			Beans.mapper(),
+			Beans.factory(),
 			Beans.walker("bson:mongo")
 		);
 		CongoCollection<User> users = database.collection(User.class);

@@ -1,6 +1,6 @@
 package org.carracoo.beans;
 
-import org.carracoo.beans.lang.ValueProperty;
+import org.carracoo.beans.Property;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,15 +12,19 @@ import org.carracoo.beans.lang.ValueProperty;
 public interface View {
 
 	public interface Key {
-		public String key (View view, ValueProperty property);
+		public String key (View view, Property property);
 	}
 
 	public interface Value {
-		public Object get (View view, ValueProperty property);
+		public Object get (View view, Property property);
 	}
 
 	public interface Values {
-		public Object get (View view, ValueProperty property, Object item);
+		public Object get (View view, Property property, Object item);
+	}
+
+	public interface Validator {
+		public Object validate (View view);
 	}
 
 	public interface BeanEncoder {

@@ -28,6 +28,31 @@ public class RestHttpServiceTest {
 		RestHttpRequest request =
 			http.get("http://23.23.70.231:9200/yp/business/_search")
 				.param("pretty","true")
+		;
+
+		RestHttpResponse response = request.call();
+		System.out.println(response);
+
+	}
+
+	@Test
+	public void testRestHttpServiceWithBody() throws IOException, RestException {
+		RestHttpRequest request =
+			http.get("http://23.23.70.231:9200/yp/business/_search")
+				.param("pretty","true")
+				.body("{'query':{'term':{'id':5589282}}}".replace('\'','"'))
+		;
+
+		RestHttpResponse response = request.call();
+		System.out.println(response);
+
+	}
+
+	@Test
+	public void testRestHttpServiceWithHeaders() throws IOException, RestException {
+		RestHttpRequest request =
+			http.get("http://23.23.70.231:9200/yp/business/_search")
+				.param("pretty","true")
 				.header("X-Hello-World","herder")
 				.body("{'query':{'term':{'id':5589282}}}".replace('\'','"'))
 		;

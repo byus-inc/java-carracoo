@@ -1,4 +1,4 @@
-package org.carracoo.beans;
+package org.carracoo.beans.exceptions;
 
 /**
  * Created with IntelliJ IDEA.
@@ -7,13 +7,13 @@ package org.carracoo.beans;
  * Time: 10:47 PM
  * To change this template use File | Settings | File Templates.
  */
-public class BeanMappingException extends BeanException {
+public class BeanEncodingException extends Exception {
 
-	public BeanMappingException(String message,Throwable cause){
+	public BeanEncodingException(String message, Throwable cause){
 		super(message,cause);
 	}
 
-	public BeanMappingException(String message){
+	public BeanEncodingException(String message){
 		super(message);
 	}
 }

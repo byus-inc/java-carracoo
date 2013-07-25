@@ -1,6 +1,9 @@
 package org.carracoo.beans.lang;
 
+import org.carracoo.beans.Property;
+import org.carracoo.beans.View;
 import org.carracoo.beans.exceptions.BeanValidationException;
+
 
 import java.util.regex.Pattern;
 
@@ -11,26 +14,26 @@ import java.util.regex.Pattern;
  * Time: 6:37 PM
  * To change this template use File | Settings | File Templates.
  */
-public class StringProperty extends ValueProperty<String> {
-	public static class Options extends ValueProperty.Options {
+public class StringProperty extends Property<String> {
+	public static class Options extends Property.Options {
 		public Pattern format = null;
 	}
 
-	@Override
 	protected Options options() {
-		return (Options) super.options();
+		return (Options) super.options;
 	}
 
 	@Override
-	public void validate() throws BeanValidationException {
-		super.validate();
-		if(!this.empty() && options().format!=null){
-			if(!options().format.matcher(get()).matches()){
-				throw new BeanValidationException(String.format(
-					"property %s is should match pattern '%s'",
-					options().name,
-					options().format.pattern()
-				));
+	public void validate(View view, Object item) throws BeanValidationException {
+		super.validate(view);
+		if(item!=null && options().format!=null){
+			if(!options().format.matcher((String)item).matches()){
+				throw new BeanValidationException(view,
+					"PROPERTY_INVALID_PATTERN",String.format(
+						"property %s '%s' should match pattern '%s'",
+						options().name, get(), options().format.pattern()
+					)
+				);
 			}
 		}
 	}

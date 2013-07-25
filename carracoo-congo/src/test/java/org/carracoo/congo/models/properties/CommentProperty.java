@@ -1,6 +1,6 @@
 package org.carracoo.congo.models.properties;
 
-import org.carracoo.beans.lang.ValueProperty;
+import org.carracoo.beans.Property;
 import org.carracoo.congo.models.Comment;
 
 /**
@@ -10,5 +10,5 @@ import org.carracoo.congo.models.Comment;
  * Time: 4:48 AM
  * To change this template use File | Settings | File Templates.
  */
-public class CommentProperty extends ValueProperty<Comment> {
+public class CommentProperty extends Property<Comment> {
 }

@@ -1,5 +1,9 @@
 package org.carracoo.beans;
 
+import org.carracoo.beans.exceptions.BeanDecodingException;
+import org.carracoo.beans.exceptions.BeanEncodingException;
+import org.carracoo.beans.exceptions.BeanException;
+import org.carracoo.beans.exceptions.BeanValidationException;
 import org.carracoo.beans.models.CommentModel;
 import org.carracoo.beans.models.PostModel;
 import org.carracoo.beans.models.UserModel;
@@ -15,12 +19,12 @@ import java.util.Map;
  * Time: 9:05 PM
  * To change this template use File | Settings | File Templates.
  */
-public class BeanFactoryTest {
+public class BeanServiceTest {
 
 	private final UserModel sergey = new UserModel(){{
 		id.set("sergey");
 		name.set("Sergey Mamyan");
-		email.set("sergey.mamyan@gmail.com");
+		email.set("sergey.mamyan@ser.com");
 		tags.set("grish","axper");
 		tags.set("hello","world","jan");
 		tags.add("done");
@@ -63,11 +67,23 @@ public class BeanFactoryTest {
 	}};
 
 	@Test
-	public void testBeanFactory() throws BeanException {
+	public void testBeanFactory() throws BeanException, BeanEncodingException, BeanDecodingException, BeanValidationException {
 
-		Map  map = Beans.encode(Beans.walker("json"), post);
-		PostModel obj = Beans.decode(Beans.walker("json"), map, PostModel.class);
+		Map         map   = Beans.encode(Beans.walker("json"), post);
+		PostModel   obj   = Beans.decode(Beans.walker("json"), map, PostModel.class);
 
 		Printer.print( Beans.encode(Beans.walker("json"), obj));
+	}
+
+	@Test
+	public void testBeanValidation() throws BeanException, BeanEncodingException, BeanDecodingException, BeanValidationException {
+		Beans.validate(Beans.walker("json"),post);
+	}
+
+	@Test(expectedExceptions = BeanValidationException.class)
+	public void testBeanValidationFail() throws BeanException, BeanEncodingException, BeanDecodingException, BeanValidationException {
+		sergey.email.set("Gago");
+		grish.name.clear();
+		Beans.validate(Beans.walker("json"),post);
 	}
 }

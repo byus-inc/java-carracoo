@@ -2,7 +2,7 @@ package org.carracoo.congo.models.properties;
 
 
 
-import org.carracoo.beans.lang.ValueProperty;
+import org.carracoo.beans.Property;
 import org.carracoo.congo.models.User;
 
 /**
@@ -12,6 +12,6 @@ import org.carracoo.congo.models.User;
  * Time: 4:48 AM
  * To change this template use File | Settings | File Templates.
  */
-public class UserProperty extends ValueProperty<User> {
+public class UserProperty extends Property<User> {
 
 }
