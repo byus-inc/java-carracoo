@@ -1,12 +1,17 @@
 package org.carracoo.congo;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import org.carracoo.beans.Definition;
 import org.carracoo.beans.exceptions.BeanException;
 import org.carracoo.beans.lang.IdentifierProperty;
 import org.carracoo.beans.Property;
 import org.carracoo.beans.utils.Query;
 import org.carracoo.utils.StringUtils;
+
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -102,7 +107,36 @@ public class CongoCollection <T>{
 	}
 
 	public CongoResult<T> find(Query query){
-		return new CongoResult<T>(mongo().find(CongoQuery.create(query)));
+		DBObject mongoQuery = CongoQuery.create(query);
+		DBCursor cursor;
+		if (mongoQuery.containsField("$query")) {
+			Integer skip = null;
+			Integer limit = null;
+			Map fields = null;
+			if (mongoQuery.containsField("$skip")) {
+				skip = (Integer) mongoQuery.removeField("$skip");
+			}
+			if (mongoQuery.containsField("$limit")) {
+				limit = (Integer) mongoQuery.removeField("$limit");
+			}
+			if (mongoQuery.containsField("$fields")) {
+				fields = (Map) mongoQuery.removeField("$fields");
+			}
+			if (fields != null) {
+				cursor = mongo().find(mongoQuery, new BasicDBObject(fields));
+			} else {
+				cursor = mongo().find(mongoQuery);
+			}
+			if (skip != null) {
+				cursor.skip(skip);
+			}
+			if (limit != null) {
+				cursor.limit(limit);
+			}
+		} else {
+			cursor = mongo().find(mongoQuery);
+		}
+		return new CongoResult<T>(cursor);
 	}
 
 	public CongoResult<T> findOnly(String query, String keys, Object... args){
