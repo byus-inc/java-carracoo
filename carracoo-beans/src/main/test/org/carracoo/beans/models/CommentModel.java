@@ -1,8 +1,11 @@
 package org.carracoo.beans.models;
 
 import org.carracoo.beans.Property;
+import org.carracoo.beans.lang.DateProperty;
 import org.carracoo.beans.models.properties.UserProperty;
 import org.carracoo.beans.lang.StringProperty;
+
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,7 +18,6 @@ public class CommentModel {
 	
 	public final UserProperty author    = new UserProperty(){
 		class Author extends Property.Options {{
-			required = true;
 		}}
 	};
 
@@ -25,4 +27,11 @@ public class CommentModel {
 		}}
 	};
 
+	public final DateProperty createdAt = new DateProperty(){
+		class CreatedAt extends Options {{
+			required = true;
+		}}{
+			set(new Date());
+		}
+	};
 }

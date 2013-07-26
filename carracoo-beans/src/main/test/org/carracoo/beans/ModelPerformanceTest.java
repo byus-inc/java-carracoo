@@ -72,7 +72,7 @@ public class ModelPerformanceTest {
 				post.id.set("post-"+1);
 				post.title.set("Post Title "+i);
 				post.owner.set(owner);
-				post.comments.add(c1,c2,c3);
+				post.comments.set(c1,c2,c3);
 				posts[t] = post;
 			}
 			System.out.println("Thread Time "+(System.currentTimeMillis()-start));

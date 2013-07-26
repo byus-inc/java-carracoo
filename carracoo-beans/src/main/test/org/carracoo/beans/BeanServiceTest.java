@@ -10,6 +10,8 @@ import org.carracoo.beans.models.UserModel;
 import org.carracoo.utils.Printer;
 import org.testng.annotations.Test;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -25,9 +27,10 @@ public class BeanServiceTest {
 		id.set("sergey");
 		name.set("Sergey Mamyan");
 		email.set("sergey.mamyan@ser.com");
-		tags.set("grish","axper");
 		tags.set("hello","world","jan");
-		tags.add("done");
+		birthday.set(new Date(87,0,01,01,0,0));
+		gender.set(Gender.MALE);
+		categories.set(Category.WORKER);
 	}};
 
 	private final UserModel aram = new UserModel(){{
@@ -35,7 +38,12 @@ public class BeanServiceTest {
 		name.set("Aram Grigoryan");
 		email.set("aram.grigoryan@gmail.com");
 		tags.set("aram","jan","tag");
-		tags.add("done");
+		//tags.add("done");
+		gender.set(Gender.MALE);
+		categories.set(
+			Category.WORKER,
+			Category.PARENT
+		);
 	}};
 
 	private final UserModel grish = new UserModel(){{
@@ -43,36 +51,50 @@ public class BeanServiceTest {
 		name.set("Grisha Gharibyan");
 		email.set("grishik@gmail.com");
 		tags.set("grish","axper");
-		tags.add("done");
+		categories.set(
+			Category.WORKER,
+			Category.PARENT,
+			Category.STUDENT
+		);
+	}};
+
+	private final UserModel veronica = new UserModel(){{
+		id.set("grisha");
+		name.set("Veronica Grishman");
+		email.set("vera@gmail.com");
+		gender.set(Gender.FEMALE);
+		categories.set(
+			Category.STUDENT,
+			Category.CHILD
+		);
 	}};
 
 	private final PostModel post = new PostModel(){{
 		id      .set("1");
 		title   .set("Cool PostModel Title");
 		owner   .set(aram);
-		comments.add(
-			new CommentModel(){{
-				author.set(sergey);
-				message.set("Hello All");
-			}},
-			new CommentModel(){{
-				author.set(aram);
-				message.set("Hello Sergey");
-			}},
-			new CommentModel(){{
-				author.set(grish);
-				message.set("Hello Guys");
-			}}
+		comments.set(
+				new CommentModel() {{
+					author.set(sergey);
+					message.set("Hello All");
+				}},
+				new CommentModel() {{
+					author.set(aram);
+					message.set("Hello Sergey");
+				}},
+				new CommentModel() {{
+					author.set(grish);
+					message.set("Hello Guys");
+				}}
 		);
 	}};
 
 	@Test
 	public void testBeanFactory() throws BeanException, BeanEncodingException, BeanDecodingException, BeanValidationException {
-
 		Map         map   = Beans.encode(Beans.walker("json"), post);
+		Printer.print(map);
 		PostModel   obj   = Beans.decode(Beans.walker("json"), map, PostModel.class);
-
-		Printer.print( Beans.encode(Beans.walker("json"), obj));
+		Printer.print(obj);
 	}
 
 	@Test

@@ -72,114 +72,51 @@ public class Property<V> implements Iterable<V> {
 		this.options = options;
 	}
 
-
-
 	final public Options options;
 
-
-	protected V value;
-	protected Collection<V> values;
+	protected V[] values;
 
 	public V get(){
-		if(options.multiple){
-			if(values==null){
-				return null;
-			}else{
-				if(values.size()>0){
-					return values.iterator().next();
-				}else{
-					return null;
-				}
-			}
-		}else{
-			return value;
-		}
+		return values==null?null:values[0];
 	}
 
+	public V get(int index){
+		return values[index];
+	}
 
-	public void set(V value){
+	public V[] all(){
+		return values;
+	}
+
+	public void set(Collection<V> collection){
+		set((V[])collection.toArray());
+	}
+
+	public void set(V... args){
+		if(args==null || args.length==0){
+			values = null;
+		}else
 		if(options.multiple){
-			setMulti(value);
+			values = args;
+		}else
+		if(args.length==1){
+			values = args;
 		}else{
-			setSingle(value);
+			throw new RuntimeException("Property is not single value");
 		}
-		this.value = value;
 	}
 
 	public void clear(){
-		value = null;
-		if(values!=null){
-			values.clear();
-		}
-	}
-
-	public void set(Iterable<V> value){
-		clear(); add(value);
-	}
-	public void set(V... args){
-		clear();
-		add(args);
-	}
-	public void add(V... args){
-		for(V v:args){
-			set(v);
-		}
-	}
-	public void add(Iterable<V> value){
-		for(V v:value){
-			set(v);
-		}
+		values = null;
 	}
 
 	public boolean empty(){
-		if(options.multiple){
-			return values==null || values.size()==0;
-		}else {
-			return null == value;
-		}
-	}
-
-	private void setSingle(V value){
-		this.value = value;
-	}
-
-	private void setMulti(V value){
-		if(values==null){
-			values = createContainer();
-		}
-		if(value instanceof Collection){
-			values.addAll((Collection)value);
-		}else {
-			values.add(value);
-		}
-	}
-
-	protected Collection<V> createContainer(){
-		try{
-			return (Collection<V>) options.container().newInstance();
-		}catch (Exception ex){
-			if(options.unique){
-				if(options.ordered){
-					return new TreeSet<V>();
-				}else{
-					return new LinkedHashSet<V>();
-				}
-			}else{
-				return new ArrayList<V>();
-			}
-		}
+		return values==null || values.length == 0;
 	}
 
 	@Override
 	public Iterator<V> iterator() {
-		if(options.multiple){
-			if(values==null){
-				values = createContainer();
-			}
-			return values.iterator();
-		}else{
-			return null;
-		}
+		return Arrays.asList(values).iterator();
 	}
 
 	public void validate(View view) throws BeanValidationException {
@@ -194,4 +131,5 @@ public class Property<V> implements Iterable<V> {
 	public void validate(View view, Object item) throws BeanValidationException {
 
 	}
+
 }

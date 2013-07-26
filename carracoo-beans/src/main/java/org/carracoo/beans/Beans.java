@@ -7,7 +7,10 @@ import org.carracoo.beans.exceptions.BeanDecodingException;
 import org.carracoo.beans.exceptions.BeanEncodingException;
 import org.carracoo.beans.exceptions.BeanException;
 import org.carracoo.beans.exceptions.BeanValidationException;
+import org.carracoo.utils.ANSI;
+import org.carracoo.utils.Printer;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -74,5 +77,53 @@ public class Beans {
 
 	public static <T> T decode(Walker view, Object target, Class<T> type) throws BeanException, BeanDecodingException {
 		return factory().getDecoder(view).decode(target, type);
+	}
+
+	static {
+		Printer.add(new BeanPrinter());
+	}
+}
+
+class BeanPrinter extends Printer.ObjectPrinter{
+
+	@Override
+	public boolean support(Object val) {
+		return val!=null && Beans.isBean(val.getClass());
+	}
+
+	@Override
+	public void print(Printer.Cursor cursor, Appendable buf, Object val) throws IOException {
+		try {
+			Collection<Property> properties = Beans.properties(val);
+			append(buf, val.getClass().getSimpleName(), ANSI.Color.BLUE);
+			for (Property property:properties){
+				cursor.enter(property.options.name);
+				nl(buf);
+				ident(buf,cursor.level());
+				append(buf, property.options.name, ANSI.Color.BLUE);
+				append(buf, " : ");
+				if(property.empty()){
+					append(buf, "EMPTY", ANSI.Color.RED);
+				}else
+				if(property.options.multiple){
+					Integer index = 0;
+					append(buf,"ARRAY", ANSI.Color.MAGENTA);
+					for(int i =0; i<property.all().length; i++){
+						cursor.enter(index++);
+						nl(buf);
+						ident(buf,cursor.level());
+						append(buf, index.toString(), ANSI.Color.MAGENTA);
+						append(buf, " : ");
+						Printer.print(cursor,buf,property.get(i));
+						cursor.exit();
+					}
+				}else{
+					Printer.print(cursor,buf,property.get());
+				}
+				cursor.exit();
+			}
+		} catch (BeanException e) {
+			append(buf, e.getMessage(), ANSI.Color.RED);
+		}
 	}
 }

@@ -4,6 +4,7 @@ package org.carracoo.beans.core;
 import org.carracoo.beans.*;
 import org.carracoo.beans.exceptions.BeanException;
 import org.carracoo.beans.exceptions.BeanValidationException;
+import org.carracoo.utils.Printer;
 
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;

@@ -114,30 +114,60 @@ public class BeanDecoderImpl implements BeanDecoder {
 			if(value instanceof Map){
 				Map map = (Map)value;
 				for(Property property:service.getProperties(model)){
-					Property.Options options = (Property.Options) property.options;
-					String key = options.name;
-					Object val = map.get(options.name);
-					Object res = null;
+					Property.Options options = property.options;
+					String key      = options.name;
+					Object val      = map.get(options.name);
+					Object res[]   = null;
 					if(map.containsKey(key)){
 						walker.enter(key);
 						if(options.multiple){
-							int index =0;
+							List<Object> list   = newInstance(List.class);
 							if(val instanceof Iterable){
-								List<Object> list   = newInstance(List.class);
+								int index =0;
 								for(Object obj:(Iterable)val){
-									walker.enter(index++);
-									list.add(decodeValue(walker,obj,options.type));
+									walker.enter(index);
+									Object itm;
+									if(property.options instanceof View.ValueDecoder){
+										View.ValueDecoder decoder = ((View.ValueDecoder)property.options);
+										itm = decoder.decode(walker,property,obj,index);
+									}else{
+										itm = obj;
+									}
+									if(!View.class.equals(itm)){
+										list.add(decodeValue(walker,itm,options.type));
+									}
 									walker.exit();
+									index++;
 								}
-								res = list;
 							}else{
-								res = decodeValue(walker,val,options.type);
+								Object itm;
+								if(property.options instanceof View.ValueDecoder){
+									View.ValueDecoder decoder = ((View.ValueDecoder)property.options);
+									itm = decoder.decode(walker,property,val,0);
+								}else{
+									itm = val;
+								}
+								if(!View.class.equals(itm)){
+									list.add(decodeValue(walker,itm,options.type));
+								}
 							}
+							res = list.toArray();
 						}else{
-							res = decodeValue(walker,val,options.type);
+							Object itm;
+							if(property.options instanceof View.ValueDecoder){
+								View.ValueDecoder decoder = ((View.ValueDecoder)property.options);
+								itm = decoder.decode(walker,property,val,0);
+							}else{
+								itm = val;
+							}
+							res = new Object[]{
+								decodeValue(walker,itm,options.type)
+							};
 						}
 					}
-					property.set(res);
+					if(res!=null){
+						property.set(res);
+					}
 				}
 			}
 			return model;

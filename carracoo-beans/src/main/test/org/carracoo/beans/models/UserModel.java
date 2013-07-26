@@ -4,6 +4,8 @@ import org.carracoo.beans.Property;
 import org.carracoo.beans.View;
 import org.carracoo.beans.lang.*;
 
+import java.util.Date;
+
 /**
  * Created with IntelliJ IDEA.
  * UserModel: Sergey
@@ -13,8 +15,16 @@ import org.carracoo.beans.lang.*;
  */
 public class UserModel implements View.BeanEncoder,View.BeanDecoder {
 
+	public enum Category {
+		WORKER,STUDENT,CHILD,PARENT
+	}
+
+	public static enum Gender{
+		MALE,FEMALE
+	}
+
 	public final StringProperty id    = new StringProperty(){
-		class Id extends Options implements View.Value,View.Key {
+		class Id extends Options implements View.ValueEncoder,View.Key {
 			public Id() {
 				required = true;
 				unique   = true;
@@ -26,7 +36,7 @@ public class UserModel implements View.BeanEncoder,View.BeanDecoder {
 			}
 
 			@Override
-			public Object get(View view, Property property) {
+			public Object encode(View view, Property property, int index) {
 				return view.path();
 			}
 		}
@@ -38,6 +48,27 @@ public class UserModel implements View.BeanEncoder,View.BeanDecoder {
 		}}
 	};
 
+	public final EnumProperty<Gender> gender  = new EnumProperty<Gender>(){
+		class Gender extends Options {{
+			numeric = false;
+		}}
+	};
+
+	public final DateProperty birthday = new DateProperty(){
+		class Birthday extends Options {{
+			required = true;
+			numeric = false;
+		}}{
+			set(new Date());
+		}
+	};
+
+	public final EnumProperty<Category> categories  = new EnumProperty<Category>(){
+		class Categories extends Options {{
+			multiple = true;
+		}}
+	};
+
 	public final EmailProperty  email = new EmailProperty(){
 		class Email extends Options {{
 			required = true;
@@ -45,15 +76,15 @@ public class UserModel implements View.BeanEncoder,View.BeanDecoder {
 	};
 
 	public final StringProperty tags = new StringProperty(){
-		class Tags extends Options implements View.Values{
+		class Tags extends Options implements View.ValueEncoder {
 			public Tags() {
 				multiple = true;
 				unique   = true;
 				ordered  = true;
 			}
 			@Override
-			public Object get(View view, Property property, Object item) {
-				return "TAG "+item;
+			public Object encode(View view, Property property, int item) {
+				return "TAG "+property.get(item);
 			}
 		}
 	};

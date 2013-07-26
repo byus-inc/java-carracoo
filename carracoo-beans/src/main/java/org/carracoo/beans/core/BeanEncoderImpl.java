@@ -5,10 +5,7 @@ import org.carracoo.beans.exceptions.BeanDecodingException;
 import org.carracoo.beans.exceptions.BeanEncodingException;
 import org.carracoo.beans.exceptions.BeanException;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -153,10 +150,14 @@ public class BeanEncoderImpl implements BeanEncoder {
 
 
 		for(Property property:properties){
+			if(property.empty()){
+				continue;
+			}
+
 			String key;
 			Object val;
 
-			Property.Options options = ((Property.Options)property.options);
+			Property.Options options = property.options;
 			if(options instanceof View.Key){
 				key = ((View.Key)property.options).key(walker,property);
 			}else{
@@ -165,34 +166,27 @@ public class BeanEncoderImpl implements BeanEncoder {
 
 			walker.enter(key);
 			if(options.multiple){
-				Collection<Object> list   = (Collection<Object>) newInstance(options.container());
-				if(options instanceof View.Values){
-					for(Object v : property){
-						walker.enter(list.size());
-						Object res = ((View.Values)options).get(walker, property, v);
-						if(View.class.equals(res)){
-							list.add(v);
-						}else{
+				List<Object> list = (List<Object>) newInstance(ARRAY_CLASS);
+				if(options instanceof View.ValueEncoder){
+					for(int i =0;i<property.all().length;i++){
+						walker.enter(i);
+						Object res = ((View.ValueEncoder)options).encode(walker, property, i);
+						if(!View.class.equals(res)){
 							list.add(res);
 						}
 						walker.exit();
 					}
 				}else{
-					for(Object v : property){
-						walker.enter(list.size());
-						list.add(v);
+					for(int i =0;i<property.all().length;i++){
+						walker.enter(i);
+						list.add(property.get(i));
 						walker.exit();
 					}
 				}
 				val = list;
 			}else{
-				if(options instanceof View.Value){
-					Object res = ((View.Value)options).get(walker, property);
-					if(View.class.equals(res)){
-						val = property.get();
-					}else{
-						val = res;
-					}
+				if(options instanceof View.ValueEncoder){
+					val = ((View.ValueEncoder)options).encode(walker, property, 0);
 				}else{
 					val = property.get();
 				}

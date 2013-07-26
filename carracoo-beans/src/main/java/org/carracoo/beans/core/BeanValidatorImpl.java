@@ -61,6 +61,9 @@ public class BeanValidatorImpl implements BeanValidator {
 
 	public void validateBean(List<BeanValidationException.Error> errors, Walker view, Object bean){
 		try {
+			if(bean==null){
+				return;
+			}
 			for(Property property:service.getProperties(bean)){
 				view.enter(property.options.name);
 				try {
@@ -78,9 +81,7 @@ public class BeanValidatorImpl implements BeanValidator {
 							view.exit();
 						}
 					}else{
-						if (property.get() != null) {
-							validateBean(errors,view,property.get());
-						}
+						validateBean(errors,view,property.get());
 					}
 				}else{
 					if(property.options.multiple){

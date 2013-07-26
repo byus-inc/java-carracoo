@@ -12,5 +12,4 @@ import org.carracoo.beans.Property;
  */
 public class UserProperty extends Property<UserModel> {
 
-
 }

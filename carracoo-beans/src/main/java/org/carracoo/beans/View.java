@@ -15,17 +15,14 @@ public interface View {
 		public String key (View view, Property property);
 	}
 
-	public interface Value {
-		public Object get (View view, Property property);
+	public interface ValueEncoder {
+		public Object encode(View view, Property property, int index);
 	}
 
-	public interface Values {
-		public Object get (View view, Property property, Object item);
+	public interface ValueDecoder {
+		public Object decode (View view, Property property, Object item, int index);
 	}
 
-	public interface Validator {
-		public Object validate (View view);
-	}
 
 	public interface BeanEncoder {
 		public Object encode(View view);
@@ -33,6 +30,10 @@ public interface View {
 
 	public interface BeanDecoder {
 		public Object decode(View view, Object value);
+	}
+
+	public interface Validator {
+		public Object validate (View view);
 	}
 
 	public String base();
