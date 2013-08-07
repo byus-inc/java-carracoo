@@ -22,16 +22,16 @@ public class RestContentType {
 	public static final Logger logger = Logger.getLogger(RestContentType.class.getSimpleName());
 
 	public static final RestContentType TEXT_PLANE       =
-		RestContentType.valueOf("application/json;charset=UTF-8");
+		RestContentType.valueOf("text/plane;charset=UTF-8");
 
 	public static final RestContentType TEXT_HTML =
-		RestContentType.valueOf("text/plain;charset=UTF-8");
+		RestContentType.valueOf("text/html;charset=UTF-8");
 
 	public static final RestContentType APPLICATION_JSON =
-		RestContentType.valueOf("text/plain;charset=UTF-8");
+		RestContentType.valueOf("application/json;charset=UTF-8");
 
 	public static final RestContentType APPLICATION_XML =
-		RestContentType.valueOf("text/plain;charset=UTF-8");
+		RestContentType.valueOf("application/xml;charset=UTF-8");
 
 	public static final RestContentType APPLICATION_OCTET_STREAM =
 		RestContentType.valueOf("application/octet-stream");

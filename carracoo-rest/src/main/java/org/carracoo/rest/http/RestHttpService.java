@@ -1,5 +1,6 @@
 package org.carracoo.rest.http;
 
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.carracoo.rest.RestExecutor;
 import org.carracoo.rest.RestRequest;
 import org.carracoo.rest.RestService;
@@ -12,7 +13,7 @@ import org.carracoo.utils.StringUtils;
  * Time: 7:39 PM
  * To change this template use File | Settings | File Templates.
  */
-public class RestHttpService implements RestService {
+public class RestHttpService extends DefaultHttpClient implements RestService  {
 
 	protected final String base;
 

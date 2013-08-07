@@ -19,9 +19,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Property<V> implements Iterable<V> {
 
 	private static final Map<Class,Options> optionsCache = new ConcurrentHashMap<Class,Options>();
-	public  static class Options {
+	public  static class Options implements View.ValueValidator {
 		//General Options
-		public Object  parent       = null;
 		public String  name         = null;
 		public Class   type         = null;
 		public Field   field        = null;
@@ -30,20 +29,15 @@ public class Property<V> implements Iterable<V> {
 		public Boolean required     = false;
 		public Boolean unique       = false;
 		public Boolean ordered      = false;
-		public Class   container    = null;
-		public Class   container(){
-			if(container==null){
-				if(unique){
-					if(ordered){
-						container = TreeSet.class;
-					}else{
-						container = LinkedHashSet.class;
-					}
-				}else{
-					container = ArrayList.class;
-				}
+
+		@Override
+		public void validate(View view, Property property, int index) throws BeanValidationException {
+			if (index==-1 && required && property.empty()){
+				throw new BeanValidationException(view,
+					"PROPERTY_REQUIRED",
+					String.format("property %s is required",name)
+				);
 			}
-			return container;
 		}
 	}
 
@@ -81,7 +75,7 @@ public class Property<V> implements Iterable<V> {
 	}
 
 	public V get(int index){
-		return values[index];
+		return values!=null && values.length>index ? values[index]:null;
 	}
 
 	public V[] all(){
@@ -100,7 +94,7 @@ public class Property<V> implements Iterable<V> {
 			values = args;
 		}else
 		if(args.length==1){
-			values = args;
+			values = args[0]==null?null:args;
 		}else{
 			throw new RuntimeException("Property is not single value");
 		}
@@ -117,19 +111,6 @@ public class Property<V> implements Iterable<V> {
 	@Override
 	public Iterator<V> iterator() {
 		return Arrays.asList(values).iterator();
-	}
-
-	public void validate(View view) throws BeanValidationException {
-		if (options.required && empty()){
-			throw new BeanValidationException(view,
-				"PROPERTY_REQUIRED",
-				String.format("property %s is required",options.name)
-			);
-		}
-	}
-
-	public void validate(View view, Object item) throws BeanValidationException {
-
 	}
 
 }

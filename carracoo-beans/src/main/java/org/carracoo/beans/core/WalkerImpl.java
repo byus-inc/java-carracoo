@@ -16,11 +16,12 @@ import java.util.Stack;
 public class WalkerImpl implements Walker {
 
 	public static class Path extends Stack<String> {
-		@Override
-		public synchronized String toString() {
+		public synchronized String string(Boolean includeArrays) {
 			StringBuilder buf = new StringBuilder();
 			for(String p:this){
-				buf.append(".").append(p);
+				if(includeArrays || !p.startsWith("#")){
+					buf.append(".").append(p);
+				}
 			}
 			return buf.length()>0 ? buf.substring(1) : "";
 		}
@@ -56,7 +57,7 @@ public class WalkerImpl implements Walker {
 		}
 
 		if(params!=null){
-			this.params = new LinkedHashMap<String,String>();
+			this.params = new LinkedHashMap<String,Object>();
 			String[] pairs = params.split("&");
 			for(String pair:pairs){
 				String[] entry = pair.split("=");
@@ -70,15 +71,15 @@ public class WalkerImpl implements Walker {
 	}
 
 	final
-	private Map<String,String> params;
+	private Map<String,Object> params;
 
 	@Override
-	public String param(String param) {
+	public Object param(String param) {
 		return params.get(param);
 	}
 
 	@Override
-	public String param(String param, String value) {
+	public Object param(String param, Object value) {
 		return params.put(param,value);
 	}
 
@@ -91,7 +92,7 @@ public class WalkerImpl implements Walker {
 	}
 
 	@Override
-	public boolean has(String param, String value) {
+	public boolean has(String param, Object value) {
 		return
 			this.params !=null &&
 			this.params.containsKey(param) &&
@@ -122,7 +123,12 @@ public class WalkerImpl implements Walker {
 	private Path path;
 	@Override
 	public  String path(){
-		return path.toString();
+		return path.string(false);
+	}
+
+	@Override
+	public  String path(Boolean includeArrays){
+		return path.string(includeArrays);
 	}
 
 	@Override
@@ -133,6 +139,16 @@ public class WalkerImpl implements Walker {
 	@Override
 	public boolean in(String path) {
 		return path().matches(path);
+	}
+
+	@Override
+	public boolean inRoot() {
+		return in("")||in("#\\d+");
+	}
+
+	@Override
+	public boolean inArray() {
+		return in(".*#\\d+.*");
 	}
 
 	@Override

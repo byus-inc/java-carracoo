@@ -97,6 +97,9 @@ public class BeanEncoderImpl implements BeanEncoder {
 		if(target instanceof Map){
 			return encodeMap(walker, target);
 		}else
+		if(target.getClass().isArray()){
+			return encodeArray(walker, target);
+		}else
 		if(target instanceof Iterable){
 			return encodeList(walker, target);
 		}else
@@ -125,6 +128,18 @@ public class BeanEncoderImpl implements BeanEncoder {
 			}
 		}
 		return map;
+	}
+
+	private Object encodeArray(Walker walker, Object target) throws BeanEncodingException {
+		Object[] source = (Object[]) target;
+		Collection<Object> list = (Collection) newInstance(ArrayList.class);
+		Integer key = 0;
+		for(Object val:source){
+			walker.enter(key++);
+			list.add(encodeValue(walker, val));
+			walker.exit();
+		}
+		return list;
 	}
 
 	private Object encodeList(Walker walker, Object target) throws BeanEncodingException {
@@ -162,6 +177,9 @@ public class BeanEncoderImpl implements BeanEncoder {
 				key = ((View.Key)property.options).key(walker,property);
 			}else{
 				key = options.name;
+			}
+			if(key==null || key.isEmpty()){
+				continue;
 			}
 
 			walker.enter(key);

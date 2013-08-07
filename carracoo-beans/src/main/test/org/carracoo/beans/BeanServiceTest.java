@@ -8,8 +8,10 @@ import org.carracoo.beans.models.CommentModel;
 import org.carracoo.beans.models.PostModel;
 import org.carracoo.beans.models.UserModel;
 import org.carracoo.utils.Printer;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.awt.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -59,7 +61,7 @@ public class BeanServiceTest {
 	}};
 
 	private final UserModel veronica = new UserModel(){{
-		id.set("grisha");
+		id.set("veronica");
 		name.set("Veronica Grishman");
 		email.set("vera@gmail.com");
 		gender.set(Gender.FEMALE);
@@ -98,14 +100,29 @@ public class BeanServiceTest {
 	}
 
 	@Test
+	public void testMultiDecode() throws BeanEncodingException, BeanException, BeanDecodingException {
+		CommentModel[] comments = post.comments.all();
+
+		Object result = Beans.encode(Beans.walker("json"), comments);
+		comments = Beans.decode(Beans.walker("json"), result, CommentModel[].class);
+		Printer.print(comments);
+	}
+
+	@Test
 	public void testBeanValidation() throws BeanException, BeanEncodingException, BeanDecodingException, BeanValidationException {
 		Beans.validate(Beans.walker("json"),post);
 	}
 
-	@Test(expectedExceptions = BeanValidationException.class)
+	@Test
 	public void testBeanValidationFail() throws BeanException, BeanEncodingException, BeanDecodingException, BeanValidationException {
-		sergey.email.set("Gago");
-		grish.name.clear();
-		Beans.validate(Beans.walker("json"),post);
+		try {
+			aram.email.clear();
+			sergey.email.set("Gago");
+			grish.name.clear();
+			Beans.validate(Beans.walker("json"),post);
+		}catch (BeanValidationException ex){
+			ex.printStackTrace();
+			Assert.assertTrue(true);
+		}
 	}
 }

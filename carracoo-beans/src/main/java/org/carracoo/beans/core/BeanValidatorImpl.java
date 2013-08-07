@@ -66,47 +66,50 @@ public class BeanValidatorImpl implements BeanValidator {
 			}
 			for(Property property:service.getProperties(bean)){
 				view.enter(property.options.name);
-				try {
-					property.validate(view);
-				}catch (BeanValidationException ex){
-					errors.addAll(ex.getErrors());
-					break;
+				View.ValueValidator validator = null;
+				Boolean isBean = service.isBean(property.options.type);
+				if(property.options instanceof View.ValueValidator){
+					validator = ((View.ValueValidator)property.options);
 				}
-				if(service.isBean(property.options.type)){
-					if(property.options.multiple){
-						int index = 0;
-						for(Object item:property){
-							view.enter(index++);
-							validateBean(errors,view,item);
-							view.exit();
+				if(property.empty()){
+					try {
+						if(validator!=null){
+							validator.validate(view,property,-1);
 						}
-					}else{
-						validateBean(errors,view,property.get());
+					}catch (BeanValidationException ex){
+						errors.addAll(ex.getErrors());
 					}
 				}else{
-					if(property.options.multiple){
-						int index = 0;
-						for(Object item:property){
-							view.enter(index++);
+					if(property.options instanceof View.ValueValidator){
+						if(property.options.multiple){
+							for(int i=0;i<property.all().length;i++){
+								view.enter(i);
+								try {
+									validator.validate(view,property,i);
+								}catch (BeanValidationException ex){
+									errors.addAll(ex.getErrors());
+								}
+								if(isBean){
+									validateBean(errors,view,property.get(i));
+								}
+								view.exit();
+							}
+						}else{
 							try {
-								property.validate(view,item);
+								validator.validate(view,property,0);
 							}catch (BeanValidationException ex){
 								errors.addAll(ex.getErrors());
 							}
-							view.exit();
-						}
-					}else{
-						try {
-							property.validate(view,property.get());
-						}catch (BeanValidationException ex){
-							errors.addAll(ex.getErrors());
+							if(isBean){
+								validateBean(errors,view,property.get(0));
+							}
 						}
 					}
 				}
 				view.exit();
 			}
-			if(bean instanceof View.Validator){
-				((View.Validator)bean).validate(view);
+			if(bean instanceof View.BeanValidator){
+				((View.BeanValidator)bean).validate(view);
 			}
 		}catch (BeanException e){
 			errors.add(

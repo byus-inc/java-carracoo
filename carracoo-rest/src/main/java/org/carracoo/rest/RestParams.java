@@ -43,4 +43,17 @@ public class RestParams extends LinkedHashMap<String,Object> {
 		}
 		return str.equals("?")?"":str;
 	}
+
+	public static RestParams parse(String str){
+		if(str.charAt(0)=='?'){
+			str = str.substring(1);
+		}
+		RestParams params = new RestParams();
+		String[] pairs = str.split("&");
+		for(String pair:pairs){
+			String[] entry = pair.split("=");
+			params.put(entry[0],entry[1]);
+		}
+		return params;
+	}
 }

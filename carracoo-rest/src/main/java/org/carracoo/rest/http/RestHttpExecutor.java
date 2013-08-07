@@ -1,13 +1,25 @@
 package org.carracoo.rest.http;
 
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.HttpEntityWrapper;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
 import org.carracoo.rest.*;
 import org.carracoo.utils.IO;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
+import java.net.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -21,76 +33,59 @@ import java.util.logging.Logger;
  * To change this template use File | Settings | File Templates.
  */
 public class RestHttpExecutor implements RestExecutor {
+
+	public static class HttpRequest extends HttpEntityEnclosingRequestBase {
+		private final String method;
+		public HttpRequest(String method){
+			this.method = method;
+		}
+		@Override
+		public String getMethod() {
+			return method;
+		}
+	}
+
 	private final static  Logger logger = Logger.getLogger(RestHttpExecutor.class.getSimpleName());
 
+	final protected RestHttpService service;
 	final protected RestRequest request;
+
 	public RestHttpExecutor(RestHttpService service, RestRequest request){
+		this.service = service;
 		this.request = request;
 	}
 
 	@Override
 	public RestResponse execute() throws RestException {
-		return call(
-			parseMethod(request),
-			parseUrl(request),
-			parseRequestHeaders(request),
-			parseBody(request)
-		);
-	}
-
-	protected String parseMethod(RestRequest request) throws RestException {
-		if(request.method()!=null){
-			return request.method();
-		}else {
-			throw new RestException("method not specified");
-		}
-	}
-
-	protected URL parseUrl(RestRequest request) throws RestException {
-		String url = request.url();
-		try {
-			return new URL(url);
-		}catch (MalformedURLException ex){
-			throw new RestException("Invalid Url "+url,ex);
-		}
-	}
-
-	protected RestHeaders parseRequestHeaders(RestRequest request) throws RestException {
-		return request.headers();
-	}
-
-	protected RestBody parseBody(RestRequest request) throws RestException {
-		return request.body();
-	}
-
-	protected RestResponse call(String method, URL url, RestHeaders headers, RestBody body) throws RestException {
 		try{
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-			initializeConnection(con);
-			initializeMethod(con,method);
-			initializeHeaders(con,headers);
-			initializeBody(con, body);
-			finalizeConnection(con);
-			return parseResult(con);
+			return parseResponse(
+				service.execute(parseRequest(request))
+			);
 		}catch(IOException ex){
-			RestHeaders hdr = parseResponseHeaders(null);
 			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
+			PrintWriter  pw = new PrintWriter(sw);
 			ex.printStackTrace(pw);
 			return createResponse(
-				RestStatus.CONNECTION_FAILED, hdr,
-				RestContentType.TEXT_PLANE,
-				sw.toString().getBytes()
+				RestStatus.CONNECTION_FAILED, new RestHeaders(),
+				createResponseBody(
+					RestContentType.TEXT_PLANE,
+					sw.toString().getBytes()
+				)
 			);
 		}
 	}
 
-	protected void initializeConnection(HttpURLConnection con){}
-	protected void initializeMethod(HttpURLConnection con, String method) throws ProtocolException {
-		con.setRequestMethod(method);
+	protected HttpRequest parseRequest(RestRequest request) {
+		HttpRequest  req = new HttpRequest(request.method());
+		req.setURI(URI.create(request.url()));
+		req.setHeaders(parseRequestHeaders(request));
+		req.setEntity(parseRequestBody(request));
+		return req;
 	}
 
-	protected void initializeHeaders(HttpURLConnection con, RestHeaders headers){
+	protected Header[] parseRequestHeaders(RestRequest request){
+		RestHeaders headers = request.headers();
+		List<Header> result = new ArrayList<Header>();
 		if(headers!=null && headers.size()>0){
 			for(Map.Entry<String,Object> entry : headers.entrySet()){
 				String key = entry.getKey();
@@ -98,91 +93,82 @@ public class RestHttpExecutor implements RestExecutor {
 				if(val instanceof List){
 					List<Object> list = ((List)val);
 					for(Object item:list){
-						con.addRequestProperty(key, item.toString());
+						result.add(new BasicHeader(key, item.toString()));
 					}
 				}else{
-					con.addRequestProperty(key, val.toString());
+					result.add(new BasicHeader(key, val.toString()));
 				}
 			}
 		}
+		Header[] resHeaders = new Header[result.size()];
+		result.toArray(resHeaders);
+		return resHeaders;
 	}
 
-	protected void initializeBody(HttpURLConnection con, RestBody body) throws IOException {
+	protected HttpEntity parseRequestBody(RestRequest request){
+		RestBody body = request.body();
+		HttpEntity result = null;
 		if(body !=null){
-		    con.setDoOutput(true);
-			con.setRequestProperty("Content-Type",body.type().toString());
-			con.setRequestProperty("Content-Length",body.length());
-			OutputStream out = con.getOutputStream();
-			out.write(body.bytes());
-			out.flush();
-			out.close();
+			ByteArrayEntity entity = new ByteArrayEntity(body.bytes());
+			entity.setContentType(body.type().toString());
+			result = entity;
 		}
+		return result;
 	}
 
-	protected void finalizeConnection(HttpURLConnection con){}
 
-	protected RestResponse parseResult(HttpURLConnection con) throws RestException,IOException {
+	protected RestResponse parseResponse(HttpResponse res) throws RestException,IOException {
 
-		RestStatus status = RestStatus.valueOf(con.getResponseCode());
+		RestStatus   status     = parseResponseStatus(res);
+		RestHeaders  headers    = parseResponseHeaders(res);
+		RestBody     body       = parseResponseBody(res);
+		RestResponse response   = createResponse(status,headers,body);
 
-
-		RestHeaders     headers          = parseResponseHeaders(con);
-		RestContentType contentType      = RestContentType.valueOf(con.getContentType());
-		String          contentEncoding  = con.getContentEncoding();
-		Integer         contentLength    = con.getContentLength();
-
-		if(contentEncoding!=null){
-			contentType.encoding(contentEncoding);
-		}
-		byte[] bytes = null;
-
-		if(contentLength != 0){
-			InputStream stream  = null;
-			try {
-				stream = con.getInputStream();
-			}catch (IOException ex){
-				stream = con.getErrorStream();
-			}
-			try {
-				if(stream!=null){
-					bytes = IO.readInputStreamBytes(stream);
-				}
-			}catch (IOException ex){
-				logger.log(Level.WARNING,"Cant read from stream",ex);
-			}
-		}
-		return createResponse(status,headers,contentType,bytes);
+		return response;
 	}
 
-	protected RestHeaders parseResponseHeaders(HttpURLConnection con){
+	protected RestStatus parseResponseStatus(HttpResponse res) {
+		return RestStatus.valueOf(res.getStatusLine().getStatusCode());
+	}
+
+	protected RestHeaders parseResponseHeaders(HttpResponse res){
 		RestHeaders headers = new RestHeaders();
-		if(con==null){
-			return headers;
-		}
-		for (Map.Entry<String,List<String>> entry:con.getHeaderFields().entrySet()){
-			if(entry.getKey()!=null){
-				String       key = entry.getKey();
-				List<String> val = entry.getValue();
-				if(val.size()>1){
-					headers.put(key,val);
-				}else{
-					headers.put(key,val.get(0));
-				}
+		for (Header header:res.getAllHeaders()){
+			if(header.getName()!=null){
+				String  key = header.getName();
+				String  val = header.getValue();
+				headers.put(key,val);
 			}
 		}
 		return headers;
 	}
 
+	protected RestBody parseResponseBody(HttpResponse res) throws IOException {
+		HttpEntity ent = res.getEntity();
+		RestContentType contentType = RestContentType.valueOf(
+			ent.getContentType().getValue()
+		);
+		byte[] bytes = null;
+		InputStream stream = ent.getContent();
+		if(stream!=null){
+			bytes = IO.readInputStreamBytes(stream);
+		}
+		return createResponseBody(contentType,bytes);
+	}
+
+	protected RestBody createResponseBody(RestContentType contentType, byte[] contentBytes){
+		if(contentType!=null){
+			return new RestBody(contentType,contentBytes);
+		}else {
+			return null;
+		}
+	}
+
 	protected RestResponse createResponse(
 		RestStatus status,
 		RestHeaders headers,
-		RestContentType contentType,
-		byte[] contentBytes
+		RestBody body
 	) throws RestException {
-		RestBody body =null;
-		if(contentType!=null){
-			body = new RestBody(contentType,contentBytes);
-		}
 		return new RestHttpResponse(request,status,headers,body);
 	}
 

@@ -3,6 +3,7 @@ package org.carracoo.beans.core;
 import org.carracoo.beans.*;
 import org.carracoo.beans.exceptions.BeanDecodingException;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -85,10 +86,32 @@ public class BeanDecoderImpl implements BeanDecoder {
 	private Object decodeValue(Walker walker, Object target, Class<?> type) throws BeanDecodingException {
 		if(service.isBean(type)){
 			return decodeBean(walker,target,type);
+		}else
+		if(type.isArray()){
+			return decodeArray(walker,target,type);
 		}else{
-			//TODO implement other cases
 			return target;
 		}
+	}
+
+	private Object decodeArray(Walker walker, Object value, Class<?> type) throws BeanDecodingException {
+		Class<?> cls    = type.getComponentType();
+		if(value instanceof List){
+			 value = ((List) value).toArray();
+		}
+		Object[] values  = (Object[])value;
+		Object[] results = null;
+		try {
+			results = (Object[]) Array.newInstance(cls, values.length);
+		} catch (Exception e) {
+			throw new BeanDecodingException("Cant create bean array of "+type,e);
+		}
+		for(int i =0;i<values.length;i++){
+			walker.enter(i);
+			results[i] = decodeValue(walker, values[i], cls);
+			walker.exit();
+		}
+		return results;
 	}
 
 	private Object decodeBean(Walker walker, Object value, Class<?> type) throws BeanDecodingException {

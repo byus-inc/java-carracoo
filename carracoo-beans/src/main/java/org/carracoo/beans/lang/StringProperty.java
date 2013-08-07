@@ -15,26 +15,34 @@ import java.util.regex.Pattern;
  * To change this template use File | Settings | File Templates.
  */
 public class StringProperty extends Property<String> {
-	public static class Options extends Property.Options {
+	public static class Options extends Property.Options implements View.ValueValidator {
 		public Pattern format = null;
+
+		@Override
+		public void validate(View view, Property property, int index) throws BeanValidationException {
+			if(index==-1){
+				super.validate(view,property,index);
+			}else{
+				if(this.format!=null){
+					String value = (String) property.get(index);
+					if(value!=null){
+						if(!this.format.matcher(value).matches()){
+							throw new BeanValidationException(view,
+								"PROPERTY_INVALID_PATTERN",String.format(
+									"property %s '%s' should match pattern '%s'",
+									this.name, value, this.format.pattern()
+								)
+							);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	protected Options options() {
 		return (Options) super.options;
 	}
 
-	@Override
-	public void validate(View view, Object item) throws BeanValidationException {
-		super.validate(view);
-		if(item!=null && options().format!=null){
-			if(!options().format.matcher((String)item).matches()){
-				throw new BeanValidationException(view,
-					"PROPERTY_INVALID_PATTERN",String.format(
-						"property %s '%s' should match pattern '%s'",
-						options().name, get(), options().format.pattern()
-					)
-				);
-			}
-		}
-	}
+
 }

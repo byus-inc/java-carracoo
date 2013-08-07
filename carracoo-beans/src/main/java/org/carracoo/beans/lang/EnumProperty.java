@@ -1,6 +1,5 @@
 package org.carracoo.beans.lang;
 
-import com.sun.xml.internal.bind.v2.model.core.EnumConstant;
 import org.carracoo.beans.Property;
 import org.carracoo.beans.View;
 

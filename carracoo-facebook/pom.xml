@@ -9,24 +9,23 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>carracoo-rest</artifactId>
+	<artifactId>carracoo-facebook</artifactId>
+
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.2.3</version>
+			<groupId>org.carracoo</groupId>
+			<artifactId>carracoo-beans</artifactId>
+			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.carracoo</groupId>
 			<artifactId>carracoo-json</artifactId>
-			<version>${project.version}</version>
+			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>6.1.1</version>
-			<scope>test</scope>
+			<groupId>org.carracoo</groupId>
+			<artifactId>carracoo-rest</artifactId>
+			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
-
 </project>

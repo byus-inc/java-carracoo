@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
  * To change this template use File | Settings | File Templates.
  */
 abstract public class RestRequest {
-	public static final Pattern PARAM = Pattern.compile("%([A-Za-z0-9]+)");
+	public static final Pattern PARAM = Pattern.compile("%([A-Za-z0-9_]+)");
 	public RestRequest(RestService service) {
 		this.service    = service;
 	}
