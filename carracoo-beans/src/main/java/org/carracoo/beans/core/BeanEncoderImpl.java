@@ -93,7 +93,9 @@ public class BeanEncoderImpl implements BeanEncoder {
 				target = result;
 			}
 		}
-
+		if(service.isBean(target.getClass())){
+			return encodeBean(walker, target);
+		}else
 		if(target instanceof Map){
 			return encodeMap(walker, target);
 		}else
@@ -105,9 +107,6 @@ public class BeanEncoderImpl implements BeanEncoder {
 		}else
 		if(target instanceof Number || target instanceof Boolean){
 			return target;
-		}else
-		if(service.isBean(target.getClass())){
-			return encodeBean(walker, target);
 		}else{
 			return target.toString();
 		}
@@ -144,7 +143,7 @@ public class BeanEncoderImpl implements BeanEncoder {
 
 	private Object encodeList(Walker walker, Object target) throws BeanEncodingException {
 		Iterable<Object> source = (Iterable) target;
-		Collection<Object> list = (Collection) newInstance(target.getClass());
+		Collection<Object> list = newInstance(ArrayList.class);
 		Integer key = 0;
 		for(Object val:source){
 			walker.enter(key++);
