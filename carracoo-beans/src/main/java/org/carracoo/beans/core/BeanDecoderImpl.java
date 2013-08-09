@@ -84,6 +84,13 @@ public class BeanDecoderImpl implements BeanDecoder {
 	}
 
 	private Object decodeValue(Walker walker, Object target, Class<?> type) throws BeanDecodingException {
+		if(type==null){
+			if(target==null){
+				return null;
+			}else{
+				type = target.getClass();
+			}
+		}
 		if(service.isBean(type)){
 			return decodeBean(walker,target,type);
 		}else
