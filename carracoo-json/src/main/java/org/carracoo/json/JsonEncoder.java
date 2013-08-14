@@ -1,6 +1,7 @@
 package org.carracoo.json;
 
 import org.carracoo.utils.ObjectUtils;
+import org.carracoo.utils.StringUtils;
 
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -171,7 +172,7 @@ public class JsonEncoder {
 	}
 
 	private String escape(String str){
-		return "\""+str.replaceAll("\\\"", "\\\\\"")+"\"";
+		return StringUtils.escapeString(str);
 	}
 	
 }

@@ -32,7 +32,7 @@ import java.util.logging.Logger;
  * Time: 7:39 PM
  * To change this template use File | Settings | File Templates.
  */
-public class RestHttpExecutor implements RestExecutor {
+public class RestHttpExecutor extends DefaultHttpClient implements RestExecutor {
 
 	public static class HttpRequest extends HttpEntityEnclosingRequestBase {
 		private final String method;
@@ -56,10 +56,10 @@ public class RestHttpExecutor implements RestExecutor {
 	}
 
 	@Override
-	public RestResponse execute() throws RestException {
+	public synchronized RestResponse execute() throws RestException {
 		try{
 			return parseResponse(
-				service.execute(parseRequest(request))
+				this.execute(parseRequest(request))
 			);
 		}catch(IOException ex){
 			StringWriter sw = new StringWriter();

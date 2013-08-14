@@ -13,7 +13,7 @@ import org.carracoo.utils.StringUtils;
  * Time: 7:39 PM
  * To change this template use File | Settings | File Templates.
  */
-public class RestHttpService extends DefaultHttpClient implements RestService  {
+public class RestHttpService implements RestService  {
 
 	protected final String base;
 
