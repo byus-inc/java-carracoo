@@ -18,12 +18,12 @@ public class FacebookExecutor extends RestHttpExecutor {
 	}
 
 	@Override
-	protected RestBody createResponseBody(RestContentType contentType, byte[] contentBytes) throws RestException {
+	protected RestBody createResponseBody(RestContentType contentType, byte[] contentBytes){
 		return new FacebookBody(contentType,contentBytes);
 	}
 
 	@Override
-	protected RestResponse createResponse(RestStatus status, RestHeaders headers, RestContentType contentType, byte[] contentBytes) throws RestException {
-		return new FacebookResponse(request,status,headers,createResponseBody(contentType,contentBytes));
+	protected RestResponse createResponse(RestStatus status, RestHeaders headers, RestBody body) throws RestException {
+		return new FacebookResponse(request,status,headers,body);
 	}
 }
