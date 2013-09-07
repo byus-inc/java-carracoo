@@ -39,6 +39,7 @@ public class NumberProperty<V extends Number> extends Property<V> {
 			set((V)Byte.valueOf((byte)(get().byteValue() - val.byteValue())));
 		}
 	}
+
 	public void add(Number val) {
 		if(options.type==Long.class){
 			set((V)Long.valueOf(get().longValue()+val.longValue()));

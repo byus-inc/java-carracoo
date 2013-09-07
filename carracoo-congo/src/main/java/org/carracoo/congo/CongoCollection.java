@@ -114,10 +114,10 @@ public class CongoCollection <T>{
 			Integer limit = null;
 			Map fields = null;
 			if (mongoQuery.containsField("$skip")) {
-				skip = (Integer) mongoQuery.removeField("$skip");
+				skip = ((Number) mongoQuery.removeField("$skip")).intValue();
 			}
 			if (mongoQuery.containsField("$limit")) {
-				limit = (Integer) mongoQuery.removeField("$limit");
+				limit = ((Number) mongoQuery.removeField("$limit")).intValue();
 			}
 			if (mongoQuery.containsField("$fields")) {
 				fields = (Map) mongoQuery.removeField("$fields");

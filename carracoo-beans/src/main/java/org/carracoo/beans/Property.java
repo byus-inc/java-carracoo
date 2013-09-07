@@ -4,6 +4,7 @@ import org.carracoo.beans.exceptions.BeanValidationException;
 import org.carracoo.utils.ReflectUtils;
 import org.carracoo.utils.StringUtils;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -32,6 +33,7 @@ public class Property<V> implements Iterable<V> {
 
 		@Override
 		public void validate(View view, Property property, int index) throws BeanValidationException {
+
 			if (index==-1 && required && property.empty()){
 				throw new BeanValidationException(view,
 					"PROPERTY_REQUIRED",
@@ -84,6 +86,34 @@ public class Property<V> implements Iterable<V> {
 
 	public void set(Collection<V> collection){
 		set((V[])collection.toArray());
+	}
+
+	public boolean has(V item){
+		if(empty()){
+			return false;
+		}else
+		if(options.multiple){
+			for(V next:all()){
+				if(item.equals(item)){
+					return true;
+				}
+			}
+			return false;
+		}else{
+			return get().equals(item);
+		}
+	}
+
+	public void add(V item){
+		if(options.multiple){
+			if(!options.unique || (options.unique && !has(item))){
+				if(values==null){
+					values = (V[])Array.newInstance(options.type,0);
+				}
+				values = Arrays.copyOf(values,values.length+1);
+				values[values.length-1] = item;
+			}
+		}
 	}
 
 	public void set(V... args){
