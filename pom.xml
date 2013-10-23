@@ -25,6 +25,9 @@
 		<module>carracoo-congo</module>
 		<module>carracoo-facebook</module>
 		<module>carracoo-pojo</module>
+		<module>carracoo-lruc</module>
+		<module>carracoo-stats</module>
+		<module>carracoo-assist</module>
 	</modules>
 
 	<properties>

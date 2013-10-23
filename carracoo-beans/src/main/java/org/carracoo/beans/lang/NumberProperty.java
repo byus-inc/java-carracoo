@@ -11,7 +11,7 @@ import org.carracoo.beans.Property;
  */
 public class NumberProperty<V extends Number> extends Property<V> {
 
-	public void inc(V step) {
+	public void inc() {
 		add((V) Integer.valueOf(1));
 	}
 
@@ -19,7 +19,7 @@ public class NumberProperty<V extends Number> extends Property<V> {
 		sub((V) Integer.valueOf(1));
 	}
 
-	public void sub(V val) {
+	public void sub(Number val) {
 		if(options.type==Long.class){
 			set((V)Long.valueOf(get().longValue()-val.longValue()));
 		}else
