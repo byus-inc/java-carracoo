@@ -94,7 +94,7 @@ public class Property<V> implements Iterable<V> {
 		}else
 		if(options.multiple){
 			for(V next:all()){
-				if(item.equals(item)){
+				if(next.equals(item)){
 					return true;
 				}
 			}
