@@ -27,7 +27,7 @@
 		<module>carracoo-pojo</module>
 		<module>carracoo-lruc</module>
 		<module>carracoo-stats</module>
-		<module>carracoo-assist</module>
+		<module>carracoo-maven</module>
 	</modules>
 
 	<properties>

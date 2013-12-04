@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.carracoo.assist;
+package org.carracoo.maven.assist;
 
 import java.util.Properties;
 

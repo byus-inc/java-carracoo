@@ -19,7 +19,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.carracoo</groupId>
-			<artifactId>carracoo-assist</artifactId>
+			<artifactId>carracoo-maven</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>

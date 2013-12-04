@@ -10,7 +10,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>maven-plugin</packaging>
 
-	<artifactId>carracoo-assist</artifactId>
+	<artifactId>carracoo-maven</artifactId>
 	<dependencies>
 
 		<dependency>
@@ -45,7 +45,11 @@
 			<artifactId>javassist</artifactId>
 			<version>3.16.1-GA</version>
 		</dependency>
-
+		<dependency>
+			<groupId>rhino</groupId>
+			<artifactId>js</artifactId>
+			<version>1.6R3</version>
+	     </dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -54,7 +58,7 @@
 				<artifactId>maven-plugin-plugin</artifactId>
 				<version>3.2</version>
 				<configuration>
-					<goalPrefix>carracoo-assist</goalPrefix>
+					<goalPrefix>carracoo</goalPrefix>
 					<skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
 				</configuration>
 				<executions>

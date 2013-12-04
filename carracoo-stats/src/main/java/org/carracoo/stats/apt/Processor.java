@@ -1,12 +1,9 @@
 package org.carracoo.stats.apt;
 
 import javassist.*;
-import org.carracoo.assist.AssistProcessor;
+import org.carracoo.maven.assist.AssistProcessor;
 import org.carracoo.stats.ann.Track;
 import org.carracoo.utils.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Processor extends AssistProcessor {
 	private static final String TRACK_STATS_PROCESSED = "TRACK_STATS_PROCESSED";
@@ -100,7 +97,6 @@ public class Processor extends AssistProcessor {
         body.append("}catch(RuntimeException ex){\n");
         body.append("  event.fail(ex,errors); throw ex;\n");
         body.append("}}");
-        System.out.println(body.toString());
         tracker.setBody(body.toString());
         cls.addMethod(tracker);
 
